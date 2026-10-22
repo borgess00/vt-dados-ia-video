@@ -1,0 +1,160 @@
+{
+  "_ajuda": "fala = texto lido pela voz (escrito do jeito que se pronuncia). legenda = texto mostrado na tela; palavras entre *asteriscos* ficam em destaque. Depois de editar, rode: npm run narracao",
+  "cenas": [
+    {
+      "id": "abertura",
+      "duracaoMinima": 8,
+      "inicioFala": 2.4,
+      "frases": [
+        {
+          "id": "abertura-1",
+          "fala": "Como usar a vê tê dados, i á. Passo a passo completo e simples.",
+          "legenda": "",
+          "semLegenda": true
+        }
+      ]
+    },
+    {
+      "id": "aviso-inicial",
+      "duracaoMinima": 4.5,
+      "inicioFala": 0.4,
+      "frases": [
+        {
+          "id": "aviso-1",
+          "fala": "Atenção! Este passo a passo é feito depois do pagamento, com a i á já paga.",
+          "legenda": "",
+          "semLegenda": true
+        }
+      ]
+    },
+    {
+      "id": "passo-1",
+      "duracaoMinima": 6,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "p1-0", "fala": "Passo um.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p1-1",
+          "fala": "Na tela do Bac Bô, tire um print do gráfico no canto inferior esquerdo.",
+          "legenda": "Na tela do *Bac Bo*, tire um *print* do gráfico no canto *inferior esquerdo*"
+        },
+        {
+          "id": "p1-2",
+          "fala": "Em seguida, salve a print.",
+          "legenda": "Em seguida, *salve* a print",
+          "pausaAntes": 0.6
+        }
+      ]
+    },
+    {
+      "id": "passo-2",
+      "duracaoMinima": 4,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "p2-0", "fala": "Passo dois.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p2-1",
+          "fala": "Volte para o site da i á.",
+          "legenda": "Volte para o *site da IA*"
+        }
+      ]
+    },
+    {
+      "id": "passo-3",
+      "duracaoMinima": 8,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "p3-0", "fala": "Passo três.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p3-1",
+          "fala": "Desça até a seção: importar tabela por imagem.",
+          "legenda": "Desça até *Importar tabela por imagem*"
+        },
+        {
+          "id": "p3-2",
+          "fala": "Adicione a print.",
+          "legenda": "*Adicione* a print",
+          "pausaAntes": 0.5
+        },
+        {
+          "id": "p3-3",
+          "fala": "Agora, clique em: ler imagem e reconhecer resultados.",
+          "legenda": "Clique em *‘Ler imagem e reconhecer resultados’*",
+          "pausaAntes": 0.6
+        }
+      ]
+    },
+    {
+      "id": "passo-4",
+      "duracaoMinima": 9,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "p4-0", "fala": "Passo quatro.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p4-1",
+          "fala": "Volte para o Bac Bô e registre todas as rodadas no site, uma por uma.",
+          "legenda": "Registre *todas as rodadas* no site, uma por uma"
+        },
+        {
+          "id": "p4-2",
+          "fala": "Cuide para registrar corretamente!",
+          "legenda": "*Cuide* para registrar *corretamente!*",
+          "pausaAntes": 0.4
+        },
+        {
+          "id": "p4-3",
+          "fala": "Use o gráfico ilustrativo como auxílio, para registrar certo.",
+          "legenda": "Use o *gráfico ilustrativo* como auxílio para registrar *certo*",
+          "pausaAntes": 0.4
+        }
+      ]
+    },
+    {
+      "id": "passo-5",
+      "duracaoMinima": 8,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "p5-0", "fala": "Passo cinco.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p5-1",
+          "fala": "Agora é só aguardar a i á detectar um padrão.",
+          "legenda": "Agora é só *aguardar* a IA detectar um *padrão*"
+        },
+        {
+          "id": "p5-2",
+          "fala": "Padrão que aconteceu cinco vezes, com sessenta por cento de assertividade.",
+          "legenda": "Padrão que aconteceu *5 vezes* com *60%* de assertividade",
+          "pausaAntes": 1.4
+        }
+      ],
+      "finalDepoisDaFala": 1.2
+    },
+    {
+      "id": "aviso-final",
+      "duracaoMinima": 10,
+      "inicioFala": 0.8,
+      "frases": [
+        {
+          "id": "aviso-final-1",
+          "fala": "Lembre-se: isso são apenas previsões e análise de padrões que já ocorreram. Aja com sabedoria, e não gaste dinheiro que não pode perder.",
+          "legenda": "",
+          "semLegenda": true
+        }
+      ],
+      "finalDepoisDaFala": 2
+    },
+    {
+      "id": "encerramento",
+      "duracaoMinima": 5.5,
+      "inicioFala": 0.8,
+      "frases": [
+        {
+          "id": "encerramento-1",
+          "fala": "vê tê dados, i á. Analise com inteligência.",
+          "legenda": "",
+          "semLegenda": true
+        }
+      ]
+    }
+  ]
+}

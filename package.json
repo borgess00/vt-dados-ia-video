@@ -9,6 +9,8 @@
   },
   "private": true,
   "dependencies": {
+    "@fontsource/montserrat": "^5.3.0",
+    "@fontsource/orbitron": "^5.3.0",
     "@remotion/cli": "4.0.538",
     "@remotion/zod-types": "4.0.538",
     "react": "19.2.3",
@@ -28,7 +30,11 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "narracao": "python3 scripts/gerar-narracao.py --modelo",
+    "sons": "python3 scripts/gerar-sons.py",
+    "render:vertical": "remotion render Tutorial-Vertical out/vt-dados-ia-tutorial-9x16.mp4",
+    "render:horizontal": "remotion render Tutorial-Horizontal out/vt-dados-ia-tutorial-16x9.mp4"
   },
   "allowScripts": {
     "esbuild": false
