@@ -34,7 +34,9 @@
     "narracao": "python3 scripts/gerar-narracao.py --modelo",
     "sons": "python3 scripts/gerar-sons.py",
     "render:vertical": "remotion render Tutorial-Vertical out/vt-dados-ia-tutorial-9x16.mp4",
-    "render:horizontal": "remotion render Tutorial-Horizontal out/vt-dados-ia-tutorial-16x9.mp4"
+    "render:horizontal": "remotion render Tutorial-Horizontal out/vt-dados-ia-tutorial-16x9.mp4",
+    "render:vertical:sem-musica": "remotion render Tutorial-Vertical out/vt-dados-ia-tutorial-9x16-sem-musica.mp4 --props={\\\"musica\\\":false}",
+    "render:horizontal:sem-musica": "remotion render Tutorial-Horizontal out/vt-dados-ia-tutorial-16x9-sem-musica.mp4 --props={\\\"musica\\\":false}"
   },
   "allowScripts": {
     "esbuild": false

@@ -16,7 +16,7 @@ export const LogoNeon: React.FC<{ tamanho?: number; inicio?: number }> = ({ tama
     return (
       <Img
         src={staticFile(capturas.logo)}
-        style={{ height: 300 * tamanho, opacity: 0.25 + 0.75 * (ligado ? 1 : 0), filter: `drop-shadow(0 0 ${24 * forca}px ${cores.neonAzul})` }}
+        style={{ height: 440 * tamanho, opacity: ligado ? 1 : 0.25, filter: `drop-shadow(0 0 ${18 * forca}px ${cores.roxo}) drop-shadow(0 0 ${40 * forca}px ${cores.roxo}aa)` }}
       />
     );
   }

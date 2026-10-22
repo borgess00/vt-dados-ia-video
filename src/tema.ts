@@ -7,8 +7,10 @@ import "@fontsource/montserrat/900.css";
 export const FPS = 30;
 
 export const cores = {
-  fundo: "#03060d",
-  fundo2: "#071428",
+  fundo: "#07051a",
+  fundo2: "#2a1166",
+  roxo: "#8b5cf6",
+  roxoForte: "#6d28d9",
   painel: "#0b1730",
   painelBorda: "#1b2d52",
   neonVerde: "#39ff9f",

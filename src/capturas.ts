@@ -24,7 +24,7 @@ export const capturas: {
 } = {
   // print real da tela do Bac Bo, recortado em retrato (nomes do chat desfocados)
   bacbo: { arquivo: "capturas/bacbo-tela.jpg", grafico: { x: 4, y: 850, w: 580, h: 142 } },
-  logo: null,
+  logo: "capturas/logo.png",
 };
 
 /** Mostra a etiqueta "TELA ILUSTRATIVA" sobre a tela simulada do Bac Bo (só quando `bacbo` é null). */

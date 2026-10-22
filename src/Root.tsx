@@ -14,6 +14,7 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1080}
         height={1920}
+        defaultProps={{ musica: true }}
       />
       <Composition
         id="Tutorial-Horizontal"
@@ -22,6 +23,7 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1920}
         height={1080}
+        defaultProps={{ musica: true }}
       />
     </>
   );

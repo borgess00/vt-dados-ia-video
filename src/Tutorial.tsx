@@ -22,9 +22,16 @@ const CENAS: { id: string; componente: React.FC; entrada: TipoEntrada; semSaida?
   { id: "encerramento", componente: Encerramento, entrada: "zoom" },
 ];
 
-const VOLUME_MUSICA = 0.16;
-const VOLUME_MUSICA_FALA = 0.07;
-const VOLUME_MUSICA_AVISO = 0.04;
+/**
+ * Música de fundo. Para usar outra música, coloque o arquivo em public/audio/
+ * (ex.: public/audio/minha-musica.mp3) e troque o caminho abaixo.
+ */
+const MUSICA = "audio/musica.wav";
+
+// volumes bem baixos para não atrapalhar a narração
+const VOLUME_MUSICA = 0.09;
+const VOLUME_MUSICA_FALA = 0.035;
+const VOLUME_MUSICA_AVISO = 0.02;
 
 const volumeMusica = (frame: number) => {
   const { falas, total } = linhaDoTempo;
@@ -44,10 +51,12 @@ const volumeMusica = (frame: number) => {
   return alvo * entrada * saida;
 };
 
-export const Tutorial: React.FC = () => {
+export type PropsTutorial = { musica: boolean };
+
+export const Tutorial: React.FC<PropsTutorial> = ({ musica }) => {
   const { cenas, falas } = linhaDoTempo;
   return (
-    <AbsoluteFill style={{ backgroundColor: "#03060d" }}>
+    <AbsoluteFill style={{ backgroundColor: "#07051a" }}>
       <Fundo />
       {CENAS.map(({ id, componente: Componente, entrada, semSaida }) => {
         const c = cenas.find((x) => x.id === id)!;
@@ -69,7 +78,7 @@ export const Tutorial: React.FC = () => {
           <Html5Audio src={staticFile(`audio/narracao/${f.id}.wav`)} volume={1} />
         </Sequence>
       ))}
-      <Html5Audio src={staticFile("audio/musica.wav")} loop volume={volumeMusica} />
+      {musica ? <Html5Audio src={staticFile(MUSICA)} loop volume={volumeMusica} /> : null}
     </AbsoluteFill>
   );
 };

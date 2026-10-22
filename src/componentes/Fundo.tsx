@@ -19,9 +19,10 @@ export const Fundo: React.FC<{ intensidade?: number }> = ({ intensidade = 1 }) =
     <AbsoluteFill style={{ backgroundColor: cores.fundo, overflow: "hidden" }}>
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse at 50% 18%, ${cores.fundo2} 0%, transparent 60%),
-            radial-gradient(ellipse at 85% 90%, rgba(46,230,255,0.10) 0%, transparent 55%),
-            radial-gradient(ellipse at 10% 75%, rgba(57,255,159,0.08) 0%, transparent 50%)`,
+          background: `radial-gradient(ellipse at 50% 12%, ${cores.fundo2} 0%, transparent 62%),
+            radial-gradient(ellipse at 88% 88%, rgba(43,107,255,0.30) 0%, transparent 55%),
+            radial-gradient(ellipse at 8% 70%, rgba(139,92,246,0.28) 0%, transparent 52%),
+            linear-gradient(180deg, #0c0826 0%, #070a24 100%)`,
         }}
       />
       {/* grade em perspectiva */}
@@ -34,8 +35,8 @@ export const Fundo: React.FC<{ intensidade?: number }> = ({ intensidade = 1 }) =
           height: height * 0.45,
           transform: "perspective(600px) rotateX(62deg)",
           transformOrigin: "50% 100%",
-          backgroundImage: `linear-gradient(rgba(46,230,255,0.22) 2px, transparent 2px),
-            linear-gradient(90deg, rgba(46,230,255,0.22) 2px, transparent 2px)`,
+          backgroundImage: `linear-gradient(rgba(139,92,246,0.35) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(139,92,246,0.35) 2px, transparent 2px)`,
           backgroundSize: "80px 80px",
           backgroundPosition: `0 ${deslocaGrade}px`,
           maskImage: "linear-gradient(to top, black 10%, transparent 90%)",
@@ -46,7 +47,7 @@ export const Fundo: React.FC<{ intensidade?: number }> = ({ intensidade = 1 }) =
       {PARTICULAS.map((p, i) => {
         const y = ((p.y * height - frame * p.vel * 3) % height + height) % height;
         const piscar = 0.35 + 0.65 * Math.abs(Math.sin(frame / 20 + i));
-        const cor = p.verde ? cores.neonVerde : cores.neonAzul;
+        const cor = p.verde ? cores.roxo : "#4f8bff";
         return (
           <div
             key={i}
@@ -65,7 +66,7 @@ export const Fundo: React.FC<{ intensidade?: number }> = ({ intensidade = 1 }) =
         );
       })}
       {/* vinheta */}
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%)" }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at center, transparent 55%, rgba(3,0,15,0.6) 100%)" }} />
     </AbsoluteFill>
   );
 };

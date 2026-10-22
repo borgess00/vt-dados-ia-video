@@ -29,7 +29,7 @@ export const Encerramento: React.FC = () => {
         }}
       >
         VT Dados IA <span style={{ color: cores.neonAzul }}>–</span>{" "}
-        <span style={{ display: vertical ? "block" : "inline", whiteSpace: "nowrap", color: cores.neonVerde, textShadow: brilho(cores.neonVerde, 0.4 * escala) }}>
+        <span style={{ display: vertical ? "block" : "inline", whiteSpace: "nowrap", color: "#c4a5ff", textShadow: brilho(cores.roxo, 0.5 * escala) }}>
           Analise com inteligência
         </span>
       </div>

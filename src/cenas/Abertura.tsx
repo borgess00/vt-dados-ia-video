@@ -103,7 +103,7 @@ export const Abertura: React.FC = () => {
           }}
         >
           COMO USAR A{vertical ? <br /> : " "}
-          <span style={{ color: cores.neonVerde, textShadow: brilho(cores.neonVerde, 0.6 * escala) }}>VT DADOS IA</span>
+          <span style={{ color: "#c4a5ff", textShadow: brilho(cores.roxo, 0.6 * escala) }}>VT DADOS IA</span>
           <div
             style={{
               position: "absolute",
