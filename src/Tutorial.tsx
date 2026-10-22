@@ -26,11 +26,13 @@ const CENAS: { id: string; componente: React.FC; entrada: TipoEntrada; semSaida?
  * Música de fundo. Para usar outra música, coloque o arquivo em public/audio/
  * (ex.: public/audio/minha-musica.mp3) e troque o caminho abaixo.
  */
-const MUSICA = "audio/musica.wav";
+// "Nego Raul" (trecho de 0:00 a 1:30), com as frequências da voz atenuadas para a narração ficar clara.
+// A trilha sintetizada original continua em "audio/musica.wav".
+const MUSICA = "audio/nego-raul.m4a";
 
 // volumes bem baixos para não atrapalhar a narração
-const VOLUME_MUSICA = 0.09;
-const VOLUME_MUSICA_FALA = 0.035;
+const VOLUME_MUSICA = 0.1;
+const VOLUME_MUSICA_FALA = 0.03;
 const VOLUME_MUSICA_AVISO = 0.02;
 
 const volumeMusica = (frame: number) => {
@@ -51,9 +53,9 @@ const volumeMusica = (frame: number) => {
   return alvo * entrada * saida;
 };
 
-export type PropsTutorial = { musica: boolean };
+export type PropsTutorial = { musica: boolean; narracao?: boolean };
 
-export const Tutorial: React.FC<PropsTutorial> = ({ musica }) => {
+export const Tutorial: React.FC<PropsTutorial> = ({ musica, narracao = true }) => {
   const { cenas, falas } = linhaDoTempo;
   return (
     <AbsoluteFill style={{ backgroundColor: "#07051a" }}>
@@ -73,7 +75,7 @@ export const Tutorial: React.FC<PropsTutorial> = ({ musica }) => {
 
       <Legendas />
 
-      {falas.map((f) => (
+      {narracao && falas.map((f) => (
         <Sequence key={f.id} from={f.inicio} durationInFrames={f.duracao + 15} name={`fala:${f.id}`} layout="none">
           <Html5Audio src={staticFile(`audio/narracao/${f.id}.wav`)} volume={1} />
         </Sequence>

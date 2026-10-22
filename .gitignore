@@ -5,3 +5,6 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# música com direitos autorais: não versionar (coloque o arquivo localmente em public/audio/)
+public/audio/nego-raul.m4a
