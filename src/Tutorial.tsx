@@ -28,7 +28,7 @@ const CENAS: { id: string; componente: React.FC; entrada: TipoEntrada; semSaida?
  */
 // "Nego Raul" (trecho de 0:00 a 1:30), com as frequências da voz atenuadas para a narração ficar clara.
 // A trilha sintetizada original continua em "audio/musica.wav".
-const MUSICA = "audio/nego-raul.m4a";
+const MUSICA = "audio/nego-raul.mp3";
 
 // volumes bem baixos para não atrapalhar a narração
 const VOLUME_MUSICA = 0.1;
