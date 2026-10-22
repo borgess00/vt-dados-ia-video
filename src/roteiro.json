@@ -32,7 +32,12 @@
       "duracaoMinima": 6,
       "inicioFala": 0.3,
       "frases": [
-        { "id": "p1-0", "fala": "Passo um.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p1-0",
+          "fala": "Passo um.",
+          "legenda": "",
+          "semLegenda": true
+        },
         {
           "id": "p1-1",
           "fala": "Na tela do Bac Bô, tire um print do gráfico no canto inferior esquerdo.",
@@ -51,7 +56,12 @@
       "duracaoMinima": 4,
       "inicioFala": 0.3,
       "frases": [
-        { "id": "p2-0", "fala": "Passo dois.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p2-0",
+          "fala": "Passo dois.",
+          "legenda": "",
+          "semLegenda": true
+        },
         {
           "id": "p2-1",
           "fala": "Volte para o site da i á.",
@@ -64,7 +74,12 @@
       "duracaoMinima": 8,
       "inicioFala": 0.3,
       "frases": [
-        { "id": "p3-0", "fala": "Passo três.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p3-0",
+          "fala": "Passo três.",
+          "legenda": "",
+          "semLegenda": true
+        },
         {
           "id": "p3-1",
           "fala": "Desça até a seção: importar tabela por imagem.",
@@ -82,14 +97,20 @@
           "legenda": "Clique em *‘Ler imagem e reconhecer resultados’*",
           "pausaAntes": 0.6
         }
-      ]
+      ],
+      "finalDepoisDaFala": 1.4
     },
     {
       "id": "passo-4",
       "duracaoMinima": 9,
       "inicioFala": 0.3,
       "frases": [
-        { "id": "p4-0", "fala": "Passo quatro.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p4-0",
+          "fala": "Passo quatro.",
+          "legenda": "",
+          "semLegenda": true
+        },
         {
           "id": "p4-1",
           "fala": "Volte para o Bac Bô e registre todas as rodadas no site, uma por uma.",
@@ -114,7 +135,12 @@
       "duracaoMinima": 8,
       "inicioFala": 0.3,
       "frases": [
-        { "id": "p5-0", "fala": "Passo cinco.", "legenda": "", "semLegenda": true },
+        {
+          "id": "p5-0",
+          "fala": "Passo cinco.",
+          "legenda": "",
+          "semLegenda": true
+        },
         {
           "id": "p5-1",
           "fala": "Agora é só aguardar a i á detectar um padrão.",

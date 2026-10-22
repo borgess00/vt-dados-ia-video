@@ -15,7 +15,9 @@ export const Tela: React.FC<{
   endereco?: string;
   fixo?: React.ReactNode;
   corBorda?: string;
-}> = ({ children, rolagem = 0, endereco, fixo, corBorda = cores.neonAzul }) => {
+  /** mostra a etiqueta "TELA ILUSTRATIVA" */
+  selo?: boolean;
+}> = ({ children, rolagem = 0, endereco, fixo, corBorda = cores.neonAzul, selo }) => {
   const { tela } = useLayout();
   const frame = useCurrentFrame();
   const escala = tela.w / TELA_W;
@@ -82,7 +84,7 @@ export const Tela: React.FC<{
           </div>
           {fixo}
         </div>
-        {mostrarSeloIlustrativo ? (
+        {selo && mostrarSeloIlustrativo ? (
           <div
             style={{
               position: "absolute",

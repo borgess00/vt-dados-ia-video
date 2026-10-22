@@ -19,17 +19,16 @@ npm run render:horizontal   # gera out/vt-dados-ia-tutorial-16x9.mp4
 
 - `src/roteiro.json` define a ordem das cenas, o texto falado (`fala`) e as legendas (`legenda`; palavras entre `*` ficam em destaque). A duração de cada cena é calculada a partir da duração real da narração.
 - `src/cenas/` tem a abertura, os avisos, os passos 1 a 5 e o encerramento.
-- `src/telas/` tem as telas **ilustrativas** do Bac Bo e do site.
-- `src/capturas.ts` serve para trocar as telas ilustrativas pelas capturas reais (veja abaixo).
+- `src/telas/` tem a tela do Bac Bo e o site recriado.
+- `src/capturas.ts` define os prints reais e o logo.
 - `public/audio/` guarda a narração, a música e os efeitos (todos gerados pelos scripts em `scripts/`).
 
-## Trocar pelas telas reais
+## Telas
 
-1. Tire um print da tela do Bac Bo e um print da página inteira do site (rolagem completa).
-2. Salve os prints em `public/capturas/`.
-3. Em `src/capturas.ts`, preencha `bacbo` e `site` com o nome do arquivo e as posições das áreas destacadas. As posições são em pixels, considerando a imagem com 900 px de largura.
-4. Mude `mostrarSeloIlustrativo` para `false`.
-5. Se tiver o logo em PNG, preencha `logo`.
+- O **site** é recriado em `src/telas/Site.tsx` a partir dos prints reais, com os mesmos textos, botões e seções na mesma ordem.
+- O **gráfico do Bac Bo** (`public/capturas/bacbo-grafico.png`) e a **ordem de leitura** (`public/capturas/ordem-de-leitura.png`) são prints reais.
+- O resto da tela do Bac Bo é ilustrativo e aparece com o selo "TELA ILUSTRATIVA". Para usar um print da tela inteira, preencha `bacbo` em `src/capturas.ts`, ou desligue o selo em `mostrarSeloIlustrativo`.
+- Para usar o logo oficial, salve o PNG em `public/capturas/` e preencha `logo` em `src/capturas.ts`.
 
 ## Narração
 

@@ -48,7 +48,6 @@ export const CirculoAnimado: React.FC<{ r: Retangulo; inicio: number; fim?: numb
         strokeLinecap="round"
         strokeDasharray={perimetro}
         strokeDashoffset={perimetro * (1 - desenho)}
-        transform={`rotate(-100 ${rx + 10} ${ry + 10})`}
       />
     </svg>
   );
