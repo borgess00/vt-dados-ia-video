@@ -31,7 +31,7 @@ const Dado: React.FC<{ valor: number; cor: string }> = ({ valor, cor }) => {
 /** Tela do Bac Bo: ilustrativa, com o gráfico real no canto inferior esquerdo. */
 export const TelaBacBo: React.FC = () => {
   if (capturas.bacbo) {
-    return <Img src={staticFile(capturas.bacbo.arquivo)} style={{ width: 900, display: "block" }} />;
+    return <Img src={staticFile(capturas.bacbo.arquivo)} style={{ width: 900, height: 1100, display: "block", objectFit: "cover" }} />;
   }
   const g = GRAFICO_BACBO;
   return (
