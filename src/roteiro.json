@@ -96,9 +96,15 @@
           "fala": "Agora, clique em: ler imagem e reconhecer resultados.",
           "legenda": "Clique em *‘Ler imagem e reconhecer resultados’*",
           "pausaAntes": 0.6
+        },
+        {
+          "id": "p3-4",
+          "fala": "Depois, clique em: adicionar resultados reconhecidos.",
+          "legenda": "Clique em *‘Adicionar resultados reconhecidos’*",
+          "pausaAntes": 1.0
         }
       ],
-      "finalDepoisDaFala": 1.4
+      "finalDepoisDaFala": 1.2
     },
     {
       "id": "passo-4",

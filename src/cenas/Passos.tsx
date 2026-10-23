@@ -176,6 +176,8 @@ export const Passo3: React.FC = () => {
   const cliqueArquivo = m2 + 12;
   const printEm = m2 + 26;
   const cliqueBotao = m3 + 50;
+  const m4 = marca(C, "p3-4");
+  const cliqueAdicionar = m4 + 45;
 
   const rolagem =
     frame < cliqueBotao
@@ -184,6 +186,7 @@ export const Passo3: React.FC = () => {
   const arq = SITE.escolherArquivo;
   const botaoArquivo = { x: arq.x + 125, y: centro(arq).y };
   const b = SITE.botaoLerImagem;
+  const add = SITE.botaoAdicionar;
 
   // print "voando" de baixo da tela até o campo de arquivo
   const voo = interpolate(frame, [cliqueArquivo + 2, printEm], [0, 1], suave);
@@ -198,6 +201,8 @@ export const Passo3: React.FC = () => {
       <Som nome="clique" em={cliqueBotao} volume={0.55} />
       <Som nome="pop" em={cliqueBotao + 18} volume={0.35} />
       <Som nome="whoosh" em={cliqueBotao + 32} volume={0.15} />
+      <Som nome="clique" em={cliqueAdicionar} volume={0.55} />
+      <Som nome="pop" em={cliqueAdicionar + 4} volume={0.35} />
       <Tela
         endereco={ENDERECO_SITE}
         corBorda={cores.neonVerde}
@@ -222,19 +227,23 @@ export const Passo3: React.FC = () => {
           ) : null
         }
       >
-        <PaginaSite printEm={printEm} cliqueLerEm={cliqueBotao} />
+        <PaginaSite printEm={printEm} cliqueLerEm={cliqueBotao} cliqueAdicionarEm={cliqueAdicionar} />
         <CaixaBrilho r={SITE.secaoImportar} inicio={m1 + 44} fim={m2} />
         <CaixaBrilho r={arq} inicio={m2} fim={m3} cor={cores.neonAzul} />
         <CursorClique de={{ x: 700, y: ROLAGEM.importar + 900 }} para={botaoArquivo} inicio={m2} clique={cliqueArquivo} fim={m3 + 12} />
         <SetaAnimada x={centro(b).x} y={b.y - 16} inicio={m3} fim={cliqueBotao + 20} />
         <CaixaBrilho r={b} inicio={m3 + 4} fim={cliqueBotao + 24} cor={cores.neonVerde} />
         <CursorClique de={{ x: botaoArquivo.x + 40, y: botaoArquivo.y + 30 }} para={{ x: centro(b).x + 190, y: centro(b).y + 10 }} inicio={m3 + 12} clique={cliqueBotao} fim={cliqueBotao + 30} />
+        <SetaAnimada x={centro(add).x} y={add.y - 16} inicio={m4} fim={cliqueAdicionar + 20} />
+        <CaixaBrilho r={add} inicio={m4 + 4} cor={cores.neonVerde} />
+        <CursorClique de={{ x: centro(add).x + 220, y: add.y + 260 }} para={{ x: centro(add).x + 180, y: centro(add).y + 10 }} inicio={m4 + 12} clique={cliqueAdicionar} />
       </Tela>
       <PassoBadge numero={3} />
       <Instrucao
         itens={[
           { de: m2, texto: "Adicione a print" },
           { de: m3, texto: "Clique em ‘Ler imagem e reconhecer resultados’" },
+          { de: m4, texto: "Clique em ‘Adicionar resultados reconhecidos’" },
         ]}
       />
     </AbsoluteFill>

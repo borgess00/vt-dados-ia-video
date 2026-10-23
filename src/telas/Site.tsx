@@ -76,6 +76,7 @@ export const SITE = {
   secaoImportar: ret(X, IMP, W, IMP_FECHADO),
   escolherArquivo: ret(X + PAD, IMP + 222, IW, 80),
   botaoLerImagem: ret(X + PAD, IMP + 320, IW, 80),
+  botaoAdicionar: ret(X + PAD, IMP + 968, IW, 76),
   statusSinal: (e = 1, h = ALTURA_STATUS) => ret(X + PAD, sinalY(e) + 215, IW, h),
   secaoSinal: (e = 1) => ret(X, sinalY(e), W, 620),
 };
@@ -97,6 +98,8 @@ export type EstadoSite = {
   printEm?: number;
   /** frame do clique em "Ler imagem e reconhecer resultados" */
   cliqueLerEm?: number;
+  /** frame do clique em "Adicionar resultados reconhecidos" */
+  cliqueAdicionarEm?: number;
   /** força a seção de importação aberta (passos 4 e 5) */
   importado?: boolean;
   /** rodadas registradas manualmente */
@@ -109,7 +112,7 @@ export type EstadoSite = {
   sinal?: { escaneandoDe?: number; detectadoEm?: number };
 };
 
-export const PaginaSite: React.FC<EstadoSite> = ({ printEm, cliqueLerEm, importado, rodadas = [], digitando = "", tocando = null, sinal }) => {
+export const PaginaSite: React.FC<EstadoSite> = ({ printEm, cliqueLerEm, cliqueAdicionarEm, importado, rodadas = [], digitando = "", tocando = null, sinal }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -247,6 +250,9 @@ export const PaginaSite: React.FC<EstadoSite> = ({ printEm, cliqueLerEm, importa
               height: 76,
               borderRadius: 16,
               background: S.azul,
+              transform: `scale(${apertado(cliqueAdicionarEm) ? 0.95 : 1})`,
+              filter: apertado(cliqueAdicionarEm) ? "brightness(1.35)" : undefined,
+              boxShadow: apertado(cliqueAdicionarEm) ? "0 0 30px rgba(255,255,255,0.45)" : undefined,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
