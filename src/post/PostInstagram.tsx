@@ -38,7 +38,7 @@ const Celular: React.FC = () => (
 );
 
 const Item: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 16, fontFamily: fontes.texto, fontWeight: 600, fontSize: 29, color: "#dcd6f5" }}>
+  <div style={{ display: "flex", alignItems: "center", gap: 16, fontFamily: fontes.texto, fontWeight: 600, fontSize: 27, color: "#dcd6f5" }}>
     <svg width="30" height="30" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
       <circle cx="12" cy="12" r="11" fill="rgba(139,92,246,0.22)" stroke={cores.roxo} strokeWidth="1.5" />
       <path d="M7 12.5l3.2 3.2L17 9" stroke="#c4a5ff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -86,18 +86,19 @@ export const PostInstagram: React.FC = () => (
       <RecorteGrafico largura={360} />
     </div>
 
-    <div style={{ position: "absolute", left: 64, top: 262, width: 560 }}>
-      <div style={{ fontFamily: fontes.texto, fontWeight: 600, fontSize: 24, letterSpacing: 4, color: "#a995e8" }}>ANÁLISE DE PADRÕES · BAC BO</div>
-      <div style={{ marginTop: 18, fontFamily: fontes.texto, fontWeight: 900, fontSize: 74, lineHeight: 1.06, color: "#fff", letterSpacing: -1 }}>
-        Leia o histórico do Bac Bo <span style={{ color: "#b794ff" }}>em segundos.</span>
+    <div style={{ position: "absolute", left: 64, top: 250, width: 545 }}>
+      <div style={{ fontFamily: fontes.texto, fontWeight: 600, fontSize: 22, letterSpacing: 3, color: "#a995e8", whiteSpace: "nowrap" }}>INTELIGÊNCIA ARTIFICIAL · BAC BO</div>
+      <div style={{ marginTop: 18, fontFamily: fontes.texto, fontWeight: 900, fontSize: 62, lineHeight: 1.06, color: "#fff", letterSpacing: -1 }}>
+        A IA que detecta padrões e <span style={{ color: "#b794ff" }}>sugere jogadas</span> no{" "}
+        <span style={{ whiteSpace: "nowrap" }}>Bac Bo.</span>
       </div>
-      <div style={{ marginTop: 26, fontFamily: fontes.texto, fontWeight: 600, fontSize: 30, lineHeight: 1.4, color: "#b9b2d6" }}>
-        Mande o print do gráfico e a IA organiza as rodadas e mostra os padrões que já se repetiram.
+      <div style={{ marginTop: 22, fontFamily: fontes.texto, fontWeight: 600, fontSize: 28, lineHeight: 1.4, color: "#b9b2d6" }}>
+        Mande o print do gráfico: ela encontra os padrões que se repetem e indica a jogada.
       </div>
-      <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 20 }}>
-        <Item>Importa o print do gráfico</Item>
-        <Item>Registro rápido das rodadas</Item>
-        <Item>Padrões com base no histórico</Item>
+      <div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 16 }}>
+        <Item>Detecta padrões sozinha</Item>
+        <Item>Sugere Banca, Jogador ou Empate</Item>
+        <Item>Mostra a taxa de acerto do padrão</Item>
       </div>
     </div>
 
