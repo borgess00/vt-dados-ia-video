@@ -28,7 +28,7 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{ musica: true }}
       />
-      {/* "Como se cadastrar": sem narração até a gravação chegar */}
+      {/* "Como se cadastrar na VT Dados IA" */}
       <Composition
         id="Cadastro-Vertical"
         component={Cadastro}
@@ -36,7 +36,7 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1080}
         height={1920}
-        defaultProps={{ musica: true, narracao: false }}
+        defaultProps={{ musica: true, narracao: true }}
       />
       <Composition
         id="Cadastro-Horizontal"
@@ -45,7 +45,7 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1920}
         height={1080}
-        defaultProps={{ musica: true, narracao: false }}
+        defaultProps={{ musica: true, narracao: true }}
       />
       <Still id="Post-Instagram" component={PostInstagram} width={1080} height={1350} />
     </>
