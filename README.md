@@ -32,18 +32,20 @@ npm run render:horizontal   # gera out/vt-dados-ia-tutorial-16x9.mp4
 
 ## Narração
 
-A narração provisória é gerada com Piper TTS (voz `pt-br-edresson-low`):
+A narração é a gravação do VT Dados, cortada em uma faixa por frase em `public/audio/narracao/<id>.wav`
+(os ids estão em `src/roteiro.json`). As durações ficam em `src/narracao.json`, e as legendas e o tempo
+das cenas se ajustam a elas.
 
-```bash
-pip install piper-tts numpy
-npm run narracao -- /caminho/pt-br-edresson-low.onnx
-```
+Para trocar uma frase, substitua o arquivo `.wav` dela e atualize a duração em `src/narracao.json`.
 
-Para usar uma voz gravada ou de outro serviço, salve um arquivo por frase em
-`public/audio/narracao/<id>.wav` (os ids estão em `src/roteiro.json`) e atualize as durações em
-`src/narracao.json`. As legendas e o tempo das cenas se ajustam sozinhos.
+A voz sintética antiga (Piper TTS) ainda pode ser gerada com
+`npm run narracao -- /caminho/pt-br-edresson-low.onnx`, mas isso sobrescreve a gravação.
 
 ## Música e efeitos
 
-`npm run sons` sintetiza a trilha (loop de 120 BPM) e os efeitos (whoosh, impacto, clique, glitch,
-notificação, scan). Não há arquivos de terceiros, então não há problema de direitos autorais.
+`npm run sons` sintetiza os efeitos (whoosh, impacto, clique, glitch, notificação, scan) e uma trilha
+alternativa (`public/audio/musica.wav`).
+
+A música de fundo é "Nego Raul" (`public/audio/nego-raul.mp3`, trecho de 0:00 a 1:30). Ela **não fica no git**,
+porque é protegida por direitos autorais: coloque o arquivo nesse caminho antes de renderizar. A música e os
+volumes ficam no começo de `src/Tutorial.tsx`, e o volume dos efeitos fica em `src/componentes/Som.tsx`.
