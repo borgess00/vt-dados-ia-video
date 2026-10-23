@@ -5,7 +5,7 @@ import { Som } from "../componentes/Som";
 import { Tela } from "../componentes/Tela";
 import { TELA_H } from "../componentes/layout";
 import { GRAFICO_BACBO, RecorteGrafico, TelaBacBo } from "../telas/BacBo";
-import { ENDERECO_SITE, IconeCheck, PaginaSite, RODADAS_REGISTRO, ROLAGEM, SITE } from "../telas/Site";
+import { ALTURA_HIPOTESE, ENDERECO_SITE, IconeCheck, PaginaSite, RODADAS_REGISTRO, ROLAGEM, SITE } from "../telas/Site";
 import { cenaPorId, fimFrase, marca } from "../tempo";
 import { cores, fontes } from "../tema";
 
@@ -329,7 +329,7 @@ export const Passo5: React.FC = () => {
       <Som nome="notificacao" em={detectado} />
       <Tela endereco={ENDERECO_SITE} corBorda={cores.neonVerde} rolagem={ROLAGEM.sinal} fixo={escaneando ? <Carregando /> : null}>
         <PaginaSite importado rodadas={RODADAS_REGISTRO} sinal={{ escaneandoDe: 6, detectadoEm: detectado }} />
-        <CaixaBrilho r={SITE.statusSinal()} inicio={detectado} cor={cores.neonVerde} />
+        <CaixaBrilho r={SITE.statusSinal(1, ALTURA_HIPOTESE)} inicio={detectado + 10} cor="#ff3b4f" />
       </Tela>
       <PassoBadge numero={5} />
       <Instrucao itens={[{ de: m1, texto: "Agora é só aguardar a IA detectar um padrão", ate: duracaoCena }]} />

@@ -31,9 +31,9 @@ const CENAS: { id: string; componente: React.FC; entrada: TipoEntrada; semSaida?
 const MUSICA = "audio/nego-raul.mp3";
 
 // volumes bem baixos para não atrapalhar a narração
-const VOLUME_MUSICA = 0.1;
-const VOLUME_MUSICA_FALA = 0.03;
-const VOLUME_MUSICA_AVISO = 0.02;
+const VOLUME_MUSICA = 0.15;
+const VOLUME_MUSICA_FALA = 0.05;
+const VOLUME_MUSICA_AVISO = 0.035;
 
 const volumeMusica = (frame: number) => {
   const { falas, total } = linhaDoTempo;

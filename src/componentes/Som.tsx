@@ -2,6 +2,9 @@ import { Html5Audio, Sequence, staticFile } from "remotion";
 
 export type NomeSom = "whoosh" | "impacto" | "clique" | "glitch" | "pop" | "notificacao" | "scan";
 
+/** Volume geral dos efeitos sonoros (1 = original). */
+const VOLUME_EFEITOS = 0.6;
+
 const volumes: Record<NomeSom, number> = {
   whoosh: 0.35,
   impacto: 0.5,
@@ -21,6 +24,6 @@ export const Som: React.FC<{ nome: NomeSom; em: number; volume?: number; duracao
   loop,
 }) => (
   <Sequence from={Math.max(0, em)} durationInFrames={duracao} layout="none" name={`som:${nome}`}>
-    <Html5Audio src={staticFile(`audio/${nome}.wav`)} volume={volume ?? volumes[nome]} loop={loop} />
+    <Html5Audio src={staticFile(`audio/${nome}.wav`)} volume={(volume ?? volumes[nome]) * VOLUME_EFEITOS} loop={loop} />
   </Sequence>
 );

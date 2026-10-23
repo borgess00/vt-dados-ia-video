@@ -58,6 +58,10 @@ const sinalY = (e: number) => IMP + IMP_FECHADO + 30 + EXPANSAO * e;
 
 const ret = (x: number, y: number, w: number, h: number): Retangulo => ({ x, y, w, h });
 
+/** Altura do quadro "STATUS DO SINAL" buscando padrão e mostrando a hipótese. */
+const ALTURA_STATUS = 170;
+export const ALTURA_HIPOTESE = 400;
+
 export const SITE = {
   titulo: ret(110, 18, 680, 100),
   botoesTopo: ret(X + 180, 172, 490, 56),
@@ -72,7 +76,7 @@ export const SITE = {
   secaoImportar: ret(X, IMP, W, IMP_FECHADO),
   escolherArquivo: ret(X + PAD, IMP + 222, IW, 80),
   botaoLerImagem: ret(X + PAD, IMP + 320, IW, 80),
-  statusSinal: (e = 1) => ret(X + PAD, sinalY(e) + 215, IW, 170),
+  statusSinal: (e = 1, h = ALTURA_STATUS) => ret(X + PAD, sinalY(e) + 215, IW, h),
   secaoSinal: (e = 1) => ret(X, sinalY(e), W, 620),
 };
 
@@ -122,6 +126,12 @@ export const PaginaSite: React.FC<EstadoSite> = ({ printEm, cliqueLerEm, importa
   const total = rodadas.length;
   const pct = (r: Rodada["r"]) => (total ? Math.round((rodadas.filter((x) => x.r === r).length / total) * 100) : 0);
   const sy = sinalY(e);
+  // o quadro da hipótese é mais alto: o que vem abaixo dele desce junto
+  const cresce =
+    sinal?.detectadoEm !== undefined
+      ? interpolate(frame, [sinal.detectadoEm, sinal.detectadoEm + 10], [0, ALTURA_HIPOTESE - ALTURA_STATUS], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+      : 0;
+  const sy2 = sy + cresce;
 
   return (
     <div style={{ position: "relative", width: 900, height: ALTURA_PAGINA, background: `radial-gradient(ellipse at 50% 0%, #0d1f4a 0%, ${S.fundo} 45%)`, fontFamily: fontes.texto, color: S.texto }}>
@@ -250,53 +260,53 @@ export const PaginaSite: React.FC<EstadoSite> = ({ printEm, cliqueLerEm, importa
       ) : null}
 
       {/* Sinal estatístico */}
-      <Cartao r={ret(X, sy, W, 620)} icone="alvo" titulo="Sinal estatístico">
+      <Cartao r={ret(X, sy, W, 620 + cresce)} icone="alvo" titulo="Sinal estatístico">
         <Descricao>
           O painel procura os padrões cadastrados no final do histórico. Só mostra uma hipótese se houver apoio em resultados anteriores; caso contrário, mantém
           'Buscando padrão...'. É uma leitura simples do histórico, não uma previsão garantida.
         </Descricao>
       </Cartao>
-      <StatusSinal y={sy + 215} sinal={sinal} fps={fps} frame={frame} />
-      <div style={{ position: "absolute", left: X + PAD, top: sy + 404, width: IW, fontSize: 21, lineHeight: 1.35, fontWeight: 600 }}>
+      <StatusSinal y={sy + 215} altura={ALTURA_STATUS + cresce} sinal={sinal} fps={fps} frame={frame} />
+      <div style={{ position: "absolute", left: X + PAD, top: sy2 + 404, width: IW, fontSize: 21, lineHeight: 1.35, fontWeight: 600 }}>
         <b>Placar dos sinais:</b> <span style={{ color: "#34d399" }}>WIN 0</span> · <span style={{ color: "#ff4d5e" }}>LOSS 0</span> ·{" "}
         <span style={{ color: "#ffc828" }}>EMPATE/DEVOLVIDA 0</span> · Total resolvido: 0
       </div>
-      <div style={{ position: "absolute", left: X + PAD + 6, top: sy + 478, display: "flex", alignItems: "center", gap: 14, fontSize: 21, fontWeight: 600 }}>
+      <div style={{ position: "absolute", left: X + PAD + 6, top: sy2 + 478, display: "flex", alignItems: "center", gap: 14, fontSize: 21, fontWeight: 600 }}>
         <div style={{ width: 22, height: 22, borderRadius: 4, background: "#ffc828", color: "#000", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900 }}>✓</div>
         Considerar empate como cobertura adicional no sinal
       </div>
-      <div style={{ position: "absolute", left: X + PAD, top: sy + 522, width: IW, padding: "14px 18px", borderRadius: 14, border: "2px solid #1d5a3c", background: "#06231a", color: "#b8f5d0", fontSize: 20, fontWeight: 600, boxSizing: "border-box" }}>
+      <div style={{ position: "absolute", left: X + PAD, top: sy2 + 522, width: IW, padding: "14px 18px", borderRadius: 14, border: "2px solid #1d5a3c", background: "#06231a", color: "#b8f5d0", fontSize: 20, fontWeight: 600, boxSizing: "border-box" }}>
         A cobertura de empate está ativada para exibição do sinal; isso não significa que o empate seja provável.
       </div>
 
       {/* Padrões encontrados */}
-      <Cartao r={ret(X, sy + 650, W, 150)} icone="grafico" titulo="Padrões encontrados">
+      <Cartao r={ret(X, sy2 + 650, W, 150)} icone="grafico" titulo="Padrões encontrados">
         <Descricao>Adicione resultados para ver estatísticas.</Descricao>
       </Cartao>
 
       {/* Marcador de nível */}
-      <Cartao r={ret(X, sy + 830, W, 360)} icone="escudo" titulo="Marcador de nível">
+      <Cartao r={ret(X, sy2 + 830, W, 360)} icone="escudo" titulo="Marcador de nível">
         <Descricao>Marcador manual de uso pessoal. O site não realiza apostas e não recomenda aumentar valores.</Descricao>
       </Cartao>
-      <Botao r={ret(X + PAD, sy + 955, (IW - 16) / 2, 70)} fundo="linear-gradient(90deg, #0b4fd1, #0a3fa8)">
+      <Botao r={ret(X + PAD, sy2 + 955, (IW - 16) / 2, 70)} fundo="linear-gradient(90deg, #0b4fd1, #0a3fa8)">
         G0
       </Botao>
-      <Botao r={ret(X + PAD + (IW + 16) / 2, sy + 955, (IW - 16) / 2, 70)} fundo={S.escuro} borda>
+      <Botao r={ret(X + PAD + (IW + 16) / 2, sy2 + 955, (IW - 16) / 2, 70)} fundo={S.escuro} borda>
         G1
       </Botao>
-      <Botao r={ret(X + PAD, sy + 1040, IW, 70)} fundo={S.escuro} borda>
+      <Botao r={ret(X + PAD, sy2 + 1040, IW, 70)} fundo={S.escuro} borda>
         G2
       </Botao>
-      <div style={{ position: "absolute", left: X + PAD, top: sy + 1124, width: IW, padding: "12px 18px", borderRadius: 14, border: "2px solid #1d5a3c", background: "#06231a", color: "#b8f5d0", fontSize: 20, fontWeight: 600, boxSizing: "border-box" }}>
+      <div style={{ position: "absolute", left: X + PAD, top: sy2 + 1124, width: IW, padding: "12px 18px", borderRadius: 14, border: "2px solid #1d5a3c", background: "#06231a", color: "#b8f5d0", fontSize: 20, fontWeight: 600, boxSizing: "border-box" }}>
         Nível selecionado: G0
       </div>
-      <Botao r={ret(X, sy + 1220, (W - 16) / 2, 72)} fundo={S.escuro} borda>
+      <Botao r={ret(X, sy2 + 1220, (W - 16) / 2, 72)} fundo={S.escuro} borda>
         ⬇ Exportar histórico
       </Botao>
-      <Botao r={ret(X + (W + 16) / 2, sy + 1220, (W - 16) / 2, 72)} fundo={S.escuro} borda>
+      <Botao r={ret(X + (W + 16) / 2, sy2 + 1220, (W - 16) / 2, 72)} fundo={S.escuro} borda>
         Limpar tudo
       </Botao>
-      <div style={{ position: "absolute", left: X, top: sy + 1320, width: W, textAlign: "center", fontSize: 17, fontWeight: 600, color: "#7d8db0", lineHeight: 1.4 }}>
+      <div style={{ position: "absolute", left: X, top: sy2 + 1320, width: W, textAlign: "center", fontSize: 17, fontWeight: 600, color: "#7d8db0", lineHeight: 1.4 }}>
         VTzin Bac Bo Live · Análise estatística experimental · Resultados aleatórios podem quebrar qualquer padrão observado.
       </div>
     </div>
@@ -436,13 +446,28 @@ const GradeAoVivo: React.FC<{ rodadas: Rodada[] }> = ({ rodadas }) => {
   );
 };
 
-const StatusSinal: React.FC<{ y: number; sinal: EstadoSite["sinal"]; frame: number; fps: number }> = ({ y, sinal, frame, fps }) => {
+const vermelhoHipotese = "#ff3b4f";
+
+const Esfera: React.FC<{ cor: string }> = ({ cor }) => (
+  <span
+    style={{
+      display: "inline-block",
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      verticalAlign: "-6px",
+      margin: "0 6px",
+      background: `radial-gradient(circle at 35% 30%, #fff 0%, ${cor} 45%, ${cor} 70%, #00000055 100%)`,
+    }}
+  />
+);
+
+const StatusSinal: React.FC<{ y: number; altura: number; sinal: EstadoSite["sinal"]; frame: number; fps: number }> = ({ y, altura, sinal, frame, fps }) => {
   const detectado = sinal?.detectadoEm !== undefined && frame >= sinal.detectadoEm;
   const escaneando = !detectado && sinal?.escaneandoDe !== undefined && frame >= sinal.escaneandoDe;
-  const entra = detectado ? spring({ frame: frame - sinal!.detectadoEm!, fps, config: { damping: 10 } }) : 0;
-  const pulso = detectado ? 0.6 + 0.4 * Math.abs(Math.sin((frame - sinal!.detectadoEm!) / 9)) : 0;
+  const entra = detectado ? spring({ frame: frame - sinal!.detectadoEm!, fps, config: { damping: 12 } }) : 0;
+  const pulso = detectado ? 0.55 + 0.45 * Math.abs(Math.sin((frame - sinal!.detectadoEm!) / 9)) : 0;
   const varre = ((frame % 36) / 36) * 120 - 10;
-  const destaque = (t: string) => <span style={{ color: cores.neonVerde, whiteSpace: "nowrap", textShadow: `0 0 ${16 * pulso}px ${cores.neonVerde}` }}>{t}</span>;
   return (
     <div
       style={{
@@ -450,23 +475,46 @@ const StatusSinal: React.FC<{ y: number; sinal: EstadoSite["sinal"]; frame: numb
         left: X + PAD,
         top: y,
         width: IW,
-        height: 170,
+        height: altura,
         borderRadius: 20,
-        border: `2px solid ${detectado ? cores.neonVerde : "#3a3f9e"}`,
-        background: detectado ? "linear-gradient(135deg, #062a1d, #081a2e)" : "linear-gradient(135deg, #0b1636, #1a0f3a)",
-        boxShadow: detectado ? `0 0 ${40 * pulso}px ${cores.neonVerde}, inset 0 0 ${24 * pulso}px ${cores.neonVerde}44` : "none",
+        border: `2px solid ${detectado ? "#4b4fae" : "#3a3f9e"}`,
+        background: "linear-gradient(135deg, #0b1636, #160f38)",
+        boxShadow: detectado ? `0 0 ${36 * pulso}px ${vermelhoHipotese}88` : "none",
         padding: "20px 24px",
         boxSizing: "border-box",
         overflow: "hidden",
       }}
     >
-      <div style={{ fontSize: 18, fontWeight: 600, letterSpacing: 2, color: S.suave }}>STATUS DO SINAL</div>
       {detectado ? (
-        <div style={{ marginTop: 8, fontSize: 36, fontWeight: 900, lineHeight: 1.2, transform: `scale(${0.9 + 0.1 * entra})`, transformOrigin: "left center" }}>
-          Padrão que aconteceu {destaque("5 vezes")} com {destaque("60%")} de assertividade
+        <div style={{ opacity: entra, transform: `translateY(${(1 - entra) * 16}px)` }}>
+          <div style={{ fontSize: 18, fontWeight: 600, letterSpacing: 1, color: S.suave }}>MELHOR HIPÓTESE PELO HISTÓRICO · AGUARDANDO PRÓXIMA RODADA</div>
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 42,
+              fontWeight: 900,
+              lineHeight: 1.2,
+              color: vermelhoHipotese,
+              textShadow: `0 0 ${18 * pulso}px ${vermelhoHipotese}aa`,
+            }}
+          >
+            HIPÓTESE DO HISTÓRICO: BANCA
+            <Esfera cor="#ff2d55" /> + COBRIR EMPATE
+            <Esfera cor="#ffc928" />
+          </div>
+          <div style={{ marginTop: 14, fontSize: 21, lineHeight: 1.45, fontWeight: 600, color: "#c9d4ec" }}>
+            Padrão Parzinho (regra do e-book: cor oposta). No seu histórico essa regra acertou 5 de 6 vezes (83%). Resultado histórico, não garantia.
+          </div>
+          <div style={{ marginTop: 12, fontSize: 21, lineHeight: 1.45, fontWeight: 600, color: "#c9d4ec" }}>
+            O painel só libera sinal quando encontra um padrão cadastrado com apoio histórico mínimo. Isso é uma hipótese estatística, não uma previsão garantida.
+          </div>
+          <div style={{ marginTop: 12, display: "inline-block", padding: "6px 16px", borderRadius: 999, background: "#1b2a4d", fontSize: 19, fontWeight: 700 }}>
+            Empate não conta como WIN neste modo
+          </div>
         </div>
       ) : (
         <>
+          <div style={{ fontSize: 18, fontWeight: 600, letterSpacing: 2, color: S.suave }}>STATUS DO SINAL</div>
           <div style={{ marginTop: 6, fontSize: 44, fontWeight: 900 }}>Buscando padrão...</div>
           <div style={{ marginTop: 8, fontSize: 21, fontWeight: 600, color: S.suave }}>Registre resultados manualmente ou importe uma tabela.</div>
         </>
