@@ -1,4 +1,5 @@
-import { Composition } from "remotion";
+import { Composition, Still } from "remotion";
+import { PostInstagram } from "./post/PostInstagram";
 import { Tutorial } from "./Tutorial";
 import { linhaDoTempo } from "./tempo";
 import { FPS } from "./tema";
@@ -25,6 +26,7 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{ musica: true }}
       />
+      <Still id="Post-Instagram" component={PostInstagram} width={1080} height={1350} />
     </>
   );
 };
