@@ -8,7 +8,22 @@ const IMPACTO = 24;
 const TITULO = 54;
 const SUBTITULO = 86;
 
-export const Abertura: React.FC = () => {
+export type PropsAbertura = {
+  /** primeira parte do título; "|" marca as quebras de linha no vídeo vertical */
+  titulo?: string;
+  /** parte do título em destaque (roxo) */
+  destaque?: string;
+  subtitulo?: string;
+  /** multiplica o tamanho da fonte do título */
+  escalaTitulo?: number;
+};
+
+export const Abertura: React.FC<PropsAbertura> = ({
+  titulo: textoTitulo = "COMO USAR A",
+  destaque = "VT DADOS IA",
+  subtitulo = "Passo a passo completo e simples",
+  escalaTitulo = 1,
+}) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const { vertical, escala } = useLayout();
@@ -94,7 +109,7 @@ export const Abertura: React.FC = () => {
             opacity: titulo,
             fontFamily: fontes.titulo,
             fontWeight: 900,
-            fontSize: (vertical ? 92 : 96) * escala,
+            fontSize: (vertical ? 92 : 96) * escala * escalaTitulo,
             lineHeight: 1.08,
             color: "#fff",
             textAlign: "center",
@@ -102,8 +117,15 @@ export const Abertura: React.FC = () => {
             letterSpacing: 2,
           }}
         >
-          COMO USAR A{vertical ? <br /> : " "}
-          <span style={{ color: "#c4a5ff", textShadow: brilho(cores.roxo, 0.6 * escala) }}>VT DADOS IA</span>
+          {textoTitulo.split("|").map((parte, i) => (
+            <span key={i}>
+              {i > 0 && !vertical ? " " : null}
+              {parte}
+              {vertical ? <br /> : null}
+            </span>
+          ))}
+          {vertical ? null : " "}
+          <span style={{ color: "#c4a5ff", textShadow: brilho(cores.roxo, 0.6 * escala) }}>{destaque}</span>
           <div
             style={{
               position: "absolute",
@@ -132,7 +154,7 @@ export const Abertura: React.FC = () => {
             borderBottom: `${3 * escala}px solid ${cores.neonAzul}`,
           }}
         >
-          Passo a passo completo e simples
+          {subtitulo}
         </div>
       </div>
     </AbsoluteFill>

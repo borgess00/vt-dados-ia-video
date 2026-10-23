@@ -2,7 +2,10 @@ import roteiro from "./roteiro.json";
 import narracao from "./narracao.json";
 import { FPS } from "./tema";
 
-const duracoes = narracao as Record<string, number>;
+type FraseRoteiro = { id: string; legenda: string; pausaAntes?: number; semLegenda?: boolean };
+export type Roteiro = {
+  cenas: { id: string; duracaoMinima: number; inicioFala: number; finalDepoisDaFala?: number; frases: FraseRoteiro[] }[];
+};
 
 export type Palavra = {
   texto: string;
@@ -79,7 +82,7 @@ const paginar = (palavras: Palavra[], fimFrase: number): PaginaLegenda[] => {
   }));
 };
 
-const montar = () => {
+const montar = (roteiro: Roteiro, duracoes: Record<string, number>) => {
   let cursor = 0;
   const cenas: Cena[] = [];
   const legendas: PaginaLegenda[] = [];
@@ -91,16 +94,16 @@ const montar = () => {
     cena.frases.forEach((frase, i) => {
       const dur = duracoes[frase.id];
       if (dur === undefined) throw new Error(`Falta narração para "${frase.id}". Rode: npm run narracao`);
-      if (i > 0) t += ("pausaAntes" in frase ? (frase.pausaAntes as number) : 0) + 0.15;
+      if (i > 0) t += (frase.pausaAntes ?? 0) + 0.15;
       frases.push({ id: frase.id, inicio: f(t), duracao: f(dur) });
       falas.push({ id: frase.id, inicio: cursor + f(t), duracao: f(dur) });
-      if (!("semLegenda" in frase && frase.semLegenda) && frase.legenda) {
+      if (!frase.semLegenda && frase.legenda) {
         const palavras = quebrarEmPalavras(frase.legenda, cursor + f(t), f(dur));
         legendas.push(...paginar(palavras, cursor + f(t) + f(dur)));
       }
       t += dur;
     });
-    const fim = "finalDepoisDaFala" in cena ? (cena.finalDepoisDaFala as number) : 0.6;
+    const fim = cena.finalDepoisDaFala ?? 0.6;
     const duracao = f(Math.max(cena.duracaoMinima, t + fim));
     cenas.push({ id: cena.id, inicio: cursor, duracao, frases });
     cursor += duracao;
@@ -108,22 +111,29 @@ const montar = () => {
   return { cenas, legendas, falas, total: cursor };
 };
 
-export const linhaDoTempo = montar();
-
-export const cenaPorId = (id: string) => {
-  const c = linhaDoTempo.cenas.find((x) => x.id === id);
-  if (!c) throw new Error(`Cena desconhecida: ${id}`);
-  return c;
+/** Linha do tempo de um vídeo (cenas, frases, legendas e falas) a partir do roteiro e das durações. */
+export const criarLinhaDoTempo = (r: Roteiro, duracoes: Record<string, number>) => {
+  const lt = montar(r, duracoes);
+  const cenaPorId = (id: string) => {
+    const c = lt.cenas.find((x) => x.id === id);
+    if (!c) throw new Error(`Cena desconhecida: ${id}`);
+    return c;
+  };
+  /** Frame (relativo à cena) em que a frase começa. */
+  const marca = (cena: string, frase: string, deslocamentoSeg = 0) => {
+    const fr = cenaPorId(cena).frases.find((x) => x.id === frase);
+    if (!fr) throw new Error(`Frase desconhecida: ${frase}`);
+    return fr.inicio + f(deslocamentoSeg);
+  };
+  const fimFrase = (cena: string, frase: string) => {
+    const fr = cenaPorId(cena).frases.find((x) => x.id === frase)!;
+    return fr.inicio + fr.duracao;
+  };
+  return { ...lt, cenaPorId, marca, fimFrase };
 };
 
-/** Frame (relativo à cena) em que a frase começa. */
-export const marca = (cena: string, frase: string, deslocamentoSeg = 0) => {
-  const fr = cenaPorId(cena).frases.find((x) => x.id === frase);
-  if (!fr) throw new Error(`Frase desconhecida: ${frase}`);
-  return fr.inicio + f(deslocamentoSeg);
-};
+export type LinhaDoTempo = ReturnType<typeof criarLinhaDoTempo>;
 
-export const fimFrase = (cena: string, frase: string) => {
-  const fr = cenaPorId(cena).frases.find((x) => x.id === frase)!;
-  return fr.inicio + fr.duracao;
-};
+// vídeo "Como usar a VT Dados IA"
+export const linhaDoTempo = criarLinhaDoTempo(roteiro as Roteiro, narracao as Record<string, number>);
+export const { cenaPorId, marca, fimFrase } = linhaDoTempo;

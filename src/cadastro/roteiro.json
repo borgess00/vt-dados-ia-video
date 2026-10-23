@@ -1,0 +1,115 @@
+{
+  "_ajuda": "Roteiro do vídeo 'Como se cadastrar na VT Dados IA'. fala = texto lido; legenda = texto na tela (palavras entre *asteriscos* ficam em destaque).",
+  "cenas": [
+    {
+      "id": "abertura",
+      "duracaoMinima": 7,
+      "inicioFala": 2.4,
+      "frases": [
+        { "id": "c0-1", "fala": "Como se cadastrar na vê tê dados, i á. É rápido e simples.", "legenda": "", "semLegenda": true }
+      ]
+    },
+    {
+      "id": "passo-1",
+      "duracaoMinima": 9,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "c1-0", "fala": "Passo um.", "legenda": "", "semLegenda": true },
+        {
+          "id": "c1-1",
+          "fala": "Entre no site da vê tê dados e toque em: criar conta.",
+          "legenda": "Entre no site e toque em *‘Criar conta’*"
+        },
+        {
+          "id": "c1-2",
+          "fala": "Digite seu e-mail e crie uma senha com no mínimo oito caracteres.",
+          "legenda": "Digite seu *e-mail* e crie uma *senha*",
+          "pausaAntes": 0.4
+        },
+        {
+          "id": "c1-3",
+          "fala": "Repita a senha e toque em: criar minha conta.",
+          "legenda": "Toque em *‘Criar minha conta’*",
+          "pausaAntes": 0.4
+        }
+      ],
+      "finalDepoisDaFala": 1.2
+    },
+    {
+      "id": "passo-2",
+      "duracaoMinima": 7,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "c2-0", "fala": "Passo dois.", "legenda": "", "semLegenda": true },
+        {
+          "id": "c2-1",
+          "fala": "Na assinatura semanal, preencha seu nome completo e seu CPF.",
+          "legenda": "Preencha seu *nome completo* e seu *CPF*"
+        },
+        {
+          "id": "c2-2",
+          "fala": "Depois, toque em: assinar.",
+          "legenda": "Toque em *‘Assinar’*",
+          "pausaAntes": 0.4
+        }
+      ],
+      "finalDepoisDaFala": 1.2
+    },
+    {
+      "id": "passo-3",
+      "duracaoMinima": 10,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "c3-0", "fala": "Passo três.", "legenda": "", "semLegenda": true },
+        {
+          "id": "c3-1",
+          "fala": "Confira os dados da fatura e escolha a forma de pagamento.",
+          "legenda": "Escolha a *forma de pagamento*"
+        },
+        {
+          "id": "c3-2",
+          "fala": "No Pix, é só ler o QR Code ou copiar o código e pagar no app do seu banco.",
+          "legenda": "Leia o *QR Code* ou *copie o código*",
+          "pausaAntes": 0.6
+        }
+      ],
+      "finalDepoisDaFala": 1.2
+    },
+    {
+      "id": "passo-4",
+      "duracaoMinima": 7,
+      "inicioFala": 0.3,
+      "frases": [
+        { "id": "c4-0", "fala": "Passo quatro.", "legenda": "", "semLegenda": true },
+        {
+          "id": "c4-1",
+          "fala": "Com o pagamento confirmado, entre com seu e-mail e senha e comece a usar a i á.",
+          "legenda": "Entre com seu *e-mail* e *senha*"
+        }
+      ],
+      "finalDepoisDaFala": 1.5
+    },
+    {
+      "id": "aviso-final",
+      "duracaoMinima": 10,
+      "inicioFala": 0.8,
+      "frases": [
+        {
+          "id": "aviso-final-1",
+          "fala": "Lembre-se: isso são apenas previsões e análise de padrões que já ocorreram. Aja com sabedoria, e não gaste dinheiro que não pode perder.",
+          "legenda": "",
+          "semLegenda": true
+        }
+      ],
+      "finalDepoisDaFala": 2
+    },
+    {
+      "id": "encerramento",
+      "duracaoMinima": 5.5,
+      "inicioFala": 0.8,
+      "frases": [
+        { "id": "encerramento-1", "fala": "vê tê dados, i á. Analise com inteligência.", "legenda": "", "semLegenda": true }
+      ]
+    }
+  ]
+}

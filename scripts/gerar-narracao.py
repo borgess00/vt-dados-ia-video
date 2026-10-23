@@ -51,10 +51,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--modelo", required=True, help="arquivo .onnx da voz Piper")
     parser.add_argument("--velocidade", type=float, default=0.9, help="< 1 fala mais rápido")
+    parser.add_argument("--roteiro", type=Path, default=ROTEIRO)
+    parser.add_argument("--saida-audio", type=Path, default=SAIDA_AUDIO)
+    parser.add_argument("--saida-json", type=Path, default=SAIDA_JSON)
     args = parser.parse_args()
 
-    roteiro = json.loads(ROTEIRO.read_text(encoding="utf-8"))
-    SAIDA_AUDIO.mkdir(parents=True, exist_ok=True)
+    roteiro = json.loads(args.roteiro.read_text(encoding="utf-8"))
+    args.saida_audio.mkdir(parents=True, exist_ok=True)
     duracoes = {}
 
     for cena in roteiro["cenas"]:
@@ -75,12 +78,12 @@ def main():
                 )
                 taxa, dados = ler_wav(bruto)
             dados = cortar_silencio(taxa, dados)
-            salvar_wav(SAIDA_AUDIO / f"{frase['id']}.wav", taxa, dados)
+            salvar_wav(args.saida_audio / f"{frase['id']}.wav", taxa, dados)
             duracoes[frase["id"]] = round(len(dados) / taxa, 3)
             print(f"{frase['id']:>16}  {duracoes[frase['id']]:5.2f}s  {frase['fala']}")
 
-    SAIDA_JSON.write_text(json.dumps(duracoes, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"\nTotal de fala: {sum(duracoes.values()):.1f}s -> {SAIDA_JSON.relative_to(RAIZ)}")
+    args.saida_json.write_text(json.dumps(duracoes, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"\nTotal de fala: {sum(duracoes.values()):.1f}s -> {args.saida_json}")
 
 
 if __name__ == "__main__":

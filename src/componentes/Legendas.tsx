@@ -1,14 +1,14 @@
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { linhaDoTempo } from "../tempo";
+import { linhaDoTempo, type PaginaLegenda } from "../tempo";
 import { brilho, cores, fontes } from "../tema";
 import { useLayout } from "./layout";
 
 /** Legendas grandes sincronizadas com a narração, palavra por palavra, com palavras-chave em destaque. */
-export const Legendas: React.FC = () => {
+export const Legendas: React.FC<{ legendas?: PaginaLegenda[] }> = ({ legendas = linhaDoTempo.legendas }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const { legenda, escala, vertical } = useLayout();
-  const pagina = linhaDoTempo.legendas.find((p) => frame >= p.inicio && frame < p.fim);
+  const pagina = legendas.find((p) => frame >= p.inicio && frame < p.fim);
   if (!pagina) return null;
   const local = frame - pagina.inicio;
   const entra = spring({ frame: local, fps, config: { damping: 15, stiffness: 200 } });
