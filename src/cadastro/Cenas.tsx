@@ -142,7 +142,7 @@ export const CadPasso3: React.FC = () => {
     { f: m1 + 40, cx: 450, cy: 518, z: 1 },
     { f: m1 + 66, cx: 400, cy: FATURA.formas.y + 40, z: 1.45 },
     { f: cliquePix + 8, cx: 400, cy: FATURA.formas.y + 40, z: 1.45 },
-    { f: cliquePix + 34, cx: 640, cy: FATURA.qrCode.y + 100, z: 1.55 },
+    { f: cliquePix + 34, cx: 600, cy: FATURA.qrCode.y + 100, z: 1.55 },
   ];
   const ts = quadros.map((q) => q.f);
   const cam = (k: "cx" | "cy" | "z") => interpolate(frame, ts, quadros.map((q) => q[k]), suave);
