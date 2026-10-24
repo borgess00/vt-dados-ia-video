@@ -111,5 +111,5 @@ export const CENAS = {
 };
 
 /** Trilha: se existir public/trilha.mp3 ela toca neste volume (0 a 1); abaixa durante a narração. */
-export const VOLUME_TRILHA = 0.4;
-export const VOLUME_TRILHA_COM_FALA = 0.14;
+export const VOLUME_TRILHA = 0.18;
+export const VOLUME_TRILHA_COM_FALA = 0.05;
