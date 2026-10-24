@@ -20,23 +20,44 @@ export const CORES = {
   textoSuave: "#B9B4D6",
 };
 
-/** Legendas: [início, fim] em segundos e o texto (no máximo 2 linhas). */
+/** Legendas: [início, fim] em segundos e o texto (no máximo 2 linhas), sincronizadas com a narração. */
 export const LEGENDAS: { de: number; ate: number; texto: string }[] = [
-  { de: 0, ate: 3, texto: "Você acompanha o gráfico do Bac Bo?" },
-  { de: 3, ate: 7, texto: "No Bac Bo, Jogador [J] e Banca [B] jogam dois dados cada." },
-  { de: 7, ate: 11, texto: "Ganha a maior soma." },
-  { de: 11, ate: 14, texto: "Somas iguais = Empate [E]" },
-  { de: 14, ate: 19, texto: "No empate, o pagamento varia conforme a soma dos dados." },
-  { de: 19, ate: 22, texto: "Cada rodada vira uma bolinha no gráfico." },
-  { de: 22, ate: 25, texto: "O empate aparece como um risco amarelo [E] na bolinha." },
-  { de: 25, ate: 28, texto: "Com o tempo, aparecem desenhos: sequências, xadrez, rampas..." },
-  { de: 28, ate: 32, texto: "Acompanhar isso na mão cansa e confunde." },
-  { de: 32, ate: 39, texto: "Com a VT Dados, você manda o print do gráfico..." },
-  { de: 39, ate: 43.5, texto: "...a IA lê coluna por coluna, organiza o histórico" },
-  { de: 43.5, ate: 48, texto: "e mostra as estatísticas de cada padrão." },
-  { de: 48, ate: 53, texto: "Tudo num painel só, atualizado a cada rodada." },
-  { de: 53, ate: 56.5, texto: "VT Dados · Link na bio" },
-  { de: 56.5, ate: 60, texto: "VT Dados é desenvolvida pela PredyX IAs" },
+  { de: 0, ate: 2.8, texto: "Você acompanha o gráfico do Bac Bo?" },
+  { de: 2.8, ate: 7, texto: "No Bac Bo, Jogador [J] e Banca [B] jogam dois dados cada." },
+  { de: 7, ate: 9.6, texto: "Ganha a maior soma." },
+  { de: 9.6, ate: 12.5, texto: "Somas iguais = Empate [E]" },
+  { de: 12.5, ate: 17, texto: "No empate, o pagamento varia conforme a soma dos dados." },
+  { de: 17, ate: 19.8, texto: "Cada rodada vira uma bolinha no gráfico." },
+  { de: 19.8, ate: 22.7, texto: "O empate aparece como um risco amarelo [E] na bolinha." },
+  { de: 22.7, ate: 27.5, texto: "Com o tempo, aparecem desenhos: sequências, xadrez, rampas..." },
+  { de: 27.5, ate: 31, texto: "Acompanhar isso na mão cansa e confunde." },
+  { de: 31, ate: 37.5, texto: "Com a VT Dados, você manda o print do gráfico..." },
+  { de: 37.5, ate: 41.2, texto: "...a IA lê coluna por coluna, organiza o histórico" },
+  { de: 41.2, ate: 45.5, texto: "e mostra as estatísticas de cada padrão." },
+  { de: 45.5, ate: 49.5, texto: "Tudo num painel só, atualizado a cada rodada." },
+  { de: 49.5, ate: 51.8, texto: "VT Dados · Link na bio" },
+  { de: 51.8, ate: 55, texto: "VT Dados é desenvolvida pela PredyX IAs" },
+  { de: 55, ate: 60, texto: "+18 · Análise estatística. Não garante resultados." },
+];
+
+/** Narração: arquivo em public/audio/narracao-reels/, o segundo em que começa e a duração. */
+export const NARRACAO: { arquivo: string; inicio: number; duracao: number }[] = [
+  { arquivo: "r01", inicio: 0.3, duracao: 2.02 },
+  { arquivo: "r02", inicio: 3.1, duracao: 3.61 },
+  { arquivo: "r03", inicio: 7.2, duracao: 1.58 },
+  { arquivo: "r04", inicio: 9.7, duracao: 1.77 },
+  { arquivo: "r05", inicio: 12.7, duracao: 3.58 },
+  { arquivo: "r06", inicio: 17.2, duracao: 2.43 },
+  { arquivo: "r07", inicio: 19.9, duracao: 2.83 },
+  { arquivo: "r08", inicio: 22.8, duracao: 4.63 },
+  { arquivo: "r09", inicio: 27.7, duracao: 2.68 },
+  { arquivo: "r10", inicio: 31.2, duracao: 3.05 },
+  { arquivo: "r11", inicio: 37.7, duracao: 3.33 },
+  { arquivo: "r12", inicio: 41.3, duracao: 2.48 },
+  { arquivo: "r13", inicio: 45.6, duracao: 2.99 },
+  { arquivo: "r14", inicio: 49.7, duracao: 2.02 },
+  { arquivo: "r15", inicio: 51.85, duracao: 3.22 },
+  { arquivo: "r16", inicio: 55.05, duracao: 4.95 },
 ];
 
 /** Textos fixos das cenas. */
@@ -76,18 +97,19 @@ export const TEXTOS = {
   desenvolvedoraFinal: "Desenvolvida pela",
 };
 
-/** Início de cada cena, em segundos. */
+/** Início de cada cena, em segundos (acompanhando a narração). */
 export const CENAS = {
   gancho: 0,
-  dados: 3,
-  empate: 14,
-  grafico: 19,
-  caderno: 28,
-  envio: 32,
-  leitura: 39,
-  painel: 48,
-  final: 53,
+  dados: 2.8,
+  empate: 12.5,
+  grafico: 17,
+  caderno: 27.5,
+  envio: 31,
+  leitura: 37.5,
+  painel: 45.5,
+  final: 49.5,
 };
 
-/** Trilha: se existir public/trilha.mp3 ela toca neste volume (0 a 1). */
-export const VOLUME_TRILHA = 0.55;
+/** Trilha: se existir public/trilha.mp3 ela toca neste volume (0 a 1); abaixa durante a narração. */
+export const VOLUME_TRILHA = 0.4;
+export const VOLUME_TRILHA_COM_FALA = 0.14;

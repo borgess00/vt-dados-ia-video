@@ -1,5 +1,5 @@
 import { AbsoluteFill, Easing, getStaticFiles, Html5Audio, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { CENAS, CORES, DURACAO, FPS, LEGENDAS, TEXTOS, VOLUME_TRILHA } from "./config";
+import { CENAS, CORES, DURACAO, FPS, LEGENDAS, NARRACAO, TEXTOS, VOLUME_TRILHA, VOLUME_TRILHA_COM_FALA } from "./config";
 import { Anel, CAVEAT, CELULAS, Celular, Dado, FundoReels, Grafico, Legenda, POPPINS, TOTAL_COLUNAS, type Destaque, type Resultado } from "./componentes";
 
 const s = (seg: number) => Math.round(seg * FPS);
@@ -344,9 +344,9 @@ const Envio: React.FC = () => {
   const logo = spring({ frame, fps, config: { damping: 12 } });
   const brilhoLogo = 0.6 + 0.4 * Math.sin(frame / 8);
   const celular = spring({ frame: frame - 18, fps, config: { damping: 14 } });
-  const voo = interpolate(frame, [64, 104], [0, 1], suave);
-  const progresso = interpolate(frame, [110, 196], [0, 1], suave);
-  const ok = spring({ frame: frame - 200, fps, config: { damping: 9 } });
+  const voo = interpolate(frame, [50, 82], [0, 1], suave);
+  const progresso = interpolate(frame, [88, 160], [0, 1], suave);
+  const ok = spring({ frame: frame - 166, fps, config: { damping: 9 } });
   return (
     <>
       <Img
@@ -377,7 +377,7 @@ const Envio: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            {frame < 104 ? <IconeUpload tamanho={110} cor="#b9a4ff" pulo={Math.abs(Math.sin(frame / 6)) * 2} /> : null}
+            {frame < 82 ? <IconeUpload tamanho={110} cor="#b9a4ff" pulo={Math.abs(Math.sin(frame / 6)) * 2} /> : null}
           </div>
           {/* print do gráfico (real) entrando no envio */}
           <div
@@ -395,17 +395,17 @@ const Envio: React.FC = () => {
           >
             <Img src={staticFile("capturas/grafico-estradao.png")} style={{ width: "100%", display: "block" }} />
           </div>
-          {frame >= 104 ? (
+          {frame >= 82 ? (
             <div style={{ position: "absolute", left: 60, right: 60, top: 500, height: 18, borderRadius: 9, background: "#221d48", overflow: "hidden" }}>
               <div style={{ width: `${progresso * 100}%`, height: "100%", background: `linear-gradient(90deg, ${CORES.roxo}, ${CORES.jogador})` }} />
             </div>
           ) : null}
-          {frame >= 104 && frame < 200 ? (
+          {frame >= 82 && frame < 166 ? (
             <div style={{ position: "absolute", left: 0, right: 0, top: 560, display: "flex", justifyContent: "center" }}>
               <IconeUpload tamanho={70} cor={CORES.roxo} pulo={Math.abs(Math.sin(frame / 5)) * 3} />
             </div>
           ) : null}
-          {frame >= 200 ? (
+          {frame >= 166 ? (
             <div style={{ position: "absolute", left: 0, right: 0, top: 550, display: "flex", justifyContent: "center", transform: `scale(${ok})` }}>
               <Check tamanho={90} />
             </div>
@@ -587,6 +587,14 @@ const ORDEM: { de: number; ate: number; cena: React.FC; semSaida?: boolean }[] =
   { de: CENAS.final, ate: 60, cena: Final, semSaida: true },
 ];
 
+/** Volume da trilha: abaixa enquanto a narração toca (com rampas curtas). */
+const FALAS = NARRACAO.map((n) => ({ de: s(n.inicio), ate: s(n.inicio + n.duracao) }));
+const volumeTrilha = (f: number) => {
+  const falando = Math.max(...FALAS.map((x) => interpolate(f, [x.de - 6, x.de, x.ate, x.ate + 10], [0, 1, 1, 0], clamp)));
+  const base = VOLUME_TRILHA - (VOLUME_TRILHA - VOLUME_TRILHA_COM_FALA) * falando;
+  return base * interpolate(f, [0, 15, DURACAO - 60, DURACAO], [0, 1, 1, 0], clamp);
+};
+
 export const Reels: React.FC = () => {
   const temTrilha = getStaticFiles().some((f) => f.name === "trilha.mp3");
   return (
@@ -607,12 +615,12 @@ export const Reels: React.FC = () => {
           <Legenda texto={l.texto} duracao={s(l.ate - l.de)} />
         </Sequence>
       ))}
-      {temTrilha ? (
-        <Html5Audio
-          src={staticFile("trilha.mp3")}
-          volume={(f) => VOLUME_TRILHA * interpolate(f, [0, 15, DURACAO - 60, DURACAO], [0, 1, 1, 0], clamp)}
-        />
-      ) : null}
+      {NARRACAO.map((n) => (
+        <Sequence key={n.arquivo} from={s(n.inicio)} layout="none" name={`fala:${n.arquivo}`}>
+          <Html5Audio src={staticFile(`audio/narracao-reels/${n.arquivo}.wav`)} />
+        </Sequence>
+      ))}
+      {temTrilha ? <Html5Audio src={staticFile("trilha.mp3")} volume={volumeTrilha} /> : null}
     </AbsoluteFill>
   );
 };
