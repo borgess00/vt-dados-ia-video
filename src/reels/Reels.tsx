@@ -503,7 +503,36 @@ const LeituraPainel: React.FC = () => {
       <Celular x={140} y={330} w={800} h={980}>
         {troca < 1 ? (
           <div style={{ position: "absolute", inset: 0, opacity: 1 - troca }}>
-            <Grafico x={(772 - TOTAL_COLUNAS * 46) / 2} y={300} celula={46} visiveis={CELULAS.length} numeros={numeros} />
+            {/* cartão igual ao "Gráfico ao vivo (ilustrativo)" do site */}
+            <div
+              style={{
+                position: "absolute",
+                left: 14,
+                right: 14,
+                top: 170,
+                height: 520,
+                borderRadius: 26,
+                border: "2px solid #1c3366",
+                background: "linear-gradient(180deg, #0a1530, #070f24)",
+                padding: "26px 24px",
+                boxSizing: "border-box",
+                fontFamily: POPPINS,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, fontWeight: 700, fontSize: 30, color: "#fff" }}>
+                <svg width="32" height="32" viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="3" fill="#dfe6f5" />
+                  <rect x="6" y="11" width="3" height="8" fill={CORES.jogador} />
+                  <rect x="10.5" y="7" width="3" height="12" fill={CORES.banca} />
+                  <rect x="15" y="13" width="3" height="6" fill={CORES.verde} />
+                </svg>
+                Gráfico ao vivo (ilustrativo)
+              </div>
+              <div style={{ marginTop: 10, fontWeight: 500, fontSize: 20, lineHeight: 1.45, color: "#9fb0d0" }}>
+                Gerado a partir das rodadas registradas, no formato do gráfico de anéis do jogo.
+              </div>
+            </div>
+            <Grafico x={(772 - TOTAL_COLUNAS * 44) / 2} y={360} celula={44} visiveis={CELULAS.length} numeros={numeros} />
           </div>
         ) : null}
         {troca > 0 ? (
