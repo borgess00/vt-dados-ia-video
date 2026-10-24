@@ -2,6 +2,8 @@ import { Composition, Still } from "remotion";
 import { Cadastro } from "./cadastro/Cadastro";
 import { tempoCadastro } from "./cadastro/tempo";
 import { PostInstagram } from "./post/PostInstagram";
+import { DURACAO, FPS as FPS_REELS } from "./reels/config";
+import { Reels } from "./reels/Reels";
 import { Tutorial } from "./Tutorial";
 import { linhaDoTempo } from "./tempo";
 import { FPS } from "./tema";
@@ -47,6 +49,7 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{ musica: true, narracao: true }}
       />
+      <Composition id="VTDados-Reels" component={Reels} durationInFrames={DURACAO} fps={FPS_REELS} width={1080} height={1920} />
       <Still id="Post-Instagram" component={PostInstagram} width={1080} height={1350} />
     </>
   );
