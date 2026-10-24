@@ -1,6 +1,6 @@
 import { AbsoluteFill, Easing, getStaticFiles, Html5Audio, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { CENAS, CORES, DURACAO, FPS, LEGENDAS, TEXTOS, VOLUME_TRILHA } from "./config";
-import { Bolinha, CAVEAT, Celular, Dado, FundoReels, Grafico, Legenda, POPPINS, type Destaque, type Resultado } from "./componentes";
+import { Anel, CAVEAT, CELULAS, Celular, Dado, FundoReels, Grafico, Legenda, POPPINS, TOTAL_COLUNAS, type Destaque, type Resultado } from "./componentes";
 
 const s = (seg: number) => Math.round(seg * FPS);
 const suave = { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) } as const;
@@ -18,7 +18,7 @@ const Cena: React.FC<{ children: React.ReactNode; semSaida?: boolean }> = ({ chi
 /* 1 ─ gancho: gráfico se preenchendo rápido */
 const Gancho: React.FC = () => {
   const frame = useCurrentFrame();
-  return <Grafico x={36} y={500} celula={72} colunas={14} visiveis={interpolate(frame, [4, 78], [0, 84], clamp)} />;
+  return <Grafico x={(1080 - TOTAL_COLUNAS * 64) / 2} y={520} celula={64} visiveis={interpolate(frame, [4, 70], [0, CELULAS.length], clamp)} />;
 };
 
 /* 2 ─ dados: Jogador x Banca */
@@ -119,21 +119,130 @@ const Dados: React.FC = () => {
   );
 };
 
+/* 2b ─ como funciona o empate (pagamentos da mesa) */
+const TabelaEmpate: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = TEXTOS.tabelaEmpate;
+  const titulo = spring({ frame, fps, config: { damping: 11 } });
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 330, display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            transform: `scale(${titulo})`,
+            padding: "14px 56px",
+            borderRadius: 999,
+            background: CORES.empate,
+            boxShadow: `0 0 40px ${CORES.empate}`,
+            fontFamily: POPPINS,
+            fontWeight: 700,
+            fontSize: 60,
+            letterSpacing: 6,
+            color: "#2a1d00",
+          }}
+        >
+          {t.titulo}
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 170,
+          right: 170,
+          top: 470,
+          padding: "34px 48px 28px",
+          borderRadius: 60,
+          background: "linear-gradient(180deg, #d9a93c 0%, #b8862a 100%)",
+          border: "5px solid #f3d27a",
+          boxShadow: "0 30px 70px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,255,255,0.15)",
+          fontFamily: POPPINS,
+          color: "#3a2600",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 30, letterSpacing: 3, opacity: 0.8 }}>
+          {t.colunas.map((c) => (
+            <span key={c}>{c}</span>
+          ))}
+        </div>
+        {t.linhas.map(([soma, paga], i) => {
+          const a = interpolate(frame, [14 + i * 10, 24 + i * 10], [0, 1], clamp);
+          return (
+            <div
+              key={soma}
+              style={{
+                marginTop: 18,
+                display: "flex",
+                alignItems: "center",
+                gap: 16,
+                fontWeight: 700,
+                fontSize: 46,
+                opacity: a,
+                transform: `translateX(${(1 - a) * -30}px)`,
+              }}
+            >
+              <span style={{ whiteSpace: "nowrap" }}>{soma}</span>
+              <span style={{ flex: 1, borderBottom: "4px dotted rgba(58,38,0,0.45)", marginTop: 18 }} />
+              <span>{paga}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 1170,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 14,
+          fontFamily: POPPINS,
+          fontWeight: 500,
+          fontSize: 34,
+          color: CORES.textoSuave,
+          opacity: interpolate(frame, [70, 82], [0, 1], clamp),
+        }}
+      >
+        <span style={{ width: 22, height: 22, borderRadius: 11, background: CORES.jogador }} />
+        <span style={{ width: 22, height: 22, borderRadius: 11, background: CORES.banca }} />
+        {t.jogadorBanca}
+      </div>
+    </>
+  );
+};
+
+/* selo da desenvolvedora */
+const LogoPredyx: React.FC<{ altura: number }> = ({ altura }) => (
+  <div style={{ padding: altura * 0.08, borderRadius: altura * 0.16, background: "#f4f4f4", boxShadow: "0 10px 30px rgba(0,0,0,0.45)" }}>
+    <Img src={staticFile("capturas/predyx-logo.png")} style={{ height: altura, display: "block" }} />
+  </div>
+);
+
+const SeloPredyx: React.FC = () => {
+  const frame = useCurrentFrame();
+  const entra = interpolate(frame, [10, 24], [0, 1], clamp);
+  return (
+    <div style={{ position: "absolute", right: 36, top: 160, display: "flex", alignItems: "center", gap: 14, opacity: entra * 0.95 }}>
+      <div style={{ textAlign: "right", fontFamily: POPPINS, fontWeight: 700, fontSize: 26, lineHeight: 1.2, color: "#d9d4f5", width: 180 }}>{TEXTOS.desenvolvedoraCanto}</div>
+      <LogoPredyx altura={120} />
+    </div>
+  );
+};
+
 /* 3 ─ gráfico coluna por coluna, com destaques de desenhos */
+const celulasDe = (cols: number[]) => CELULAS.filter((c) => cols.includes(c.c)).map((c) => [c.c, c.l] as [number, number]);
 const DESTAQUES: Destaque[] = [
-  { celulas: [0, 1, 2, 3, 4, 5].map((l) => [2, l] as [number, number]), rotulo: TEXTOS.rotulosPadroes.sequencia, de: 160, ate: 212 },
-  {
-    celulas: [0, 1, 2, 3, 4, 5].flatMap((l) => [[5, l] as [number, number], [6, l] as [number, number]]),
-    rotulo: TEXTOS.rotulosPadroes.xadrez,
-    de: 206,
-    ate: 258,
-  },
-  { celulas: [0, 1, 2, 3, 4].map((k) => [8 + k, k] as [number, number]), rotulo: TEXTOS.rotulosPadroes.rampa, de: 252, ate: 300 },
+  { celulas: CELULAS.filter((c) => c.empate).map((c) => [c.c, c.l] as [number, number]), rotulo: TEXTOS.empate.toLowerCase(), de: 96, ate: 176 },
+  { celulas: celulasDe([2]), rotulo: TEXTOS.rotulosPadroes.sequencia, de: 180, ate: 214 },
+  { celulas: celulasDe([4, 5, 6, 7]), rotulo: TEXTOS.rotulosPadroes.xadrez, de: 210, ate: 242 },
+  { celulas: celulasDe([8, 9, 10, 11]), rotulo: TEXTOS.rotulosPadroes.rampa, de: 238, ate: 270 },
 ];
 
 const GraficoColunas: React.FC = () => {
   const frame = useCurrentFrame();
-  return <Grafico x={36} y={540} celula={72} colunas={14} visiveis={interpolate(frame, [6, 228], [0, 84], clamp)} destaques={DESTAQUES} />;
+  return <Grafico x={(1080 - TOTAL_COLUNAS * 64) / 2} y={560} celula={64} visiveis={interpolate(frame, [6, 90], [0, CELULAS.length], clamp)} destaques={DESTAQUES} />;
 };
 
 /* 4 ─ caderno bagunçado */
@@ -144,12 +253,12 @@ const Rabisco: React.FC<{ d: string; de: number; cor?: string; largura?: number 
 };
 
 const LINHAS_CADERNO: { texto: string; de: number; rot: number; x: number }[] = [
-  { texto: "B B J B E J ?", de: 6, rot: -2, x: 90 },
-  { texto: "J J B J B B B", de: 26, rot: 1.5, x: 110 },
-  { texto: "xadrez?? 3x B", de: 46, rot: -3, x: 80 },
-  { texto: "B J B J ... J?", de: 66, rot: 2, x: 120 },
-  { texto: "rampa ou não??", de: 86, rot: -1.5, x: 95 },
-  { texto: "J B B E B J B", de: 106, rot: 2.5, x: 100 },
+  { texto: "B B J B E J ?", de: 4, rot: -2, x: 90 },
+  { texto: "J J B J B B B", de: 18, rot: 1.5, x: 110 },
+  { texto: "xadrez?? 3x B", de: 32, rot: -3, x: 80 },
+  { texto: "B J B J ... J?", de: 46, rot: 2, x: 120 },
+  { texto: "rampa ou não??", de: 60, rot: -1.5, x: 95 },
+  { texto: "J B B E B J B", de: 74, rot: 2.5, x: 100 },
 ];
 
 const Caderno: React.FC = () => {
@@ -200,12 +309,12 @@ const Caderno: React.FC = () => {
         );
       })}
       <svg width={800} height={960} style={{ position: "absolute", left: 0, top: 0 }}>
-        <Rabisco d="M 90 205 L 520 175" de={40} cor="#c0392b" largura={7} />
-        <Rabisco d="M 100 445 C 180 400, 260 490, 340 430 S 500 480, 560 420" de={80} cor="#c0392b" largura={6} />
-        <Rabisco d="M 560 330 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0" de={60} cor="#d35400" largura={5} />
-        <Rabisco d="M 600 560 L 700 640 M 700 560 L 600 640" de={100} cor="#c0392b" largura={8} />
-        <Rabisco d="M 120 800 C 300 760, 420 860, 650 790" de={118} cor="#2b2b6e" largura={5} />
-        <Rabisco d="M 640 780 l -26 -8 m 26 8 l -12 22" de={126} cor="#2b2b6e" largura={5} />
+        <Rabisco d="M 90 205 L 520 175" de={28} cor="#c0392b" largura={7} />
+        <Rabisco d="M 100 445 C 180 400, 260 490, 340 430 S 500 480, 560 420" de={56} cor="#c0392b" largura={6} />
+        <Rabisco d="M 560 330 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0" de={42} cor="#d35400" largura={5} />
+        <Rabisco d="M 600 560 L 700 640 M 700 560 L 600 640" de={70} cor="#c0392b" largura={8} />
+        <Rabisco d="M 120 800 C 300 760, 420 860, 650 790" de={82} cor="#2b2b6e" largura={5} />
+        <Rabisco d="M 640 780 l -26 -8 m 26 8 l -12 22" de={88} cor="#2b2b6e" largura={5} />
       </svg>
     </div>
   );
@@ -284,7 +393,7 @@ const Envio: React.FC = () => {
               boxShadow: "0 18px 40px rgba(0,0,0,0.6)",
             }}
           >
-            <Img src={staticFile("capturas/bacbo-grafico.png")} style={{ width: "100%", display: "block" }} />
+            <Img src={staticFile("capturas/grafico-estradao.png")} style={{ width: "100%", display: "block" }} />
           </div>
           {frame >= 104 ? (
             <div style={{ position: "absolute", left: 60, right: 60, top: 500, height: 18, borderRadius: 9, background: "#221d48", overflow: "hidden" }}>
@@ -316,13 +425,13 @@ const Painel: React.FC<{ atualiza: number; novaBolinha: number }> = ({ atualiza,
   return (
     <div style={{ position: "absolute", inset: 0, padding: "84px 30px 30px", boxSizing: "border-box" }}>
       {/* últimas rodadas */}
-      <div style={{ display: "flex", gap: 10, justifyContent: "center", height: 64, alignItems: "center", overflow: "hidden" }}>
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", height: 70, alignItems: "center", overflow: "hidden", background: "#fff", borderRadius: 16, margin: "0 20px" }}>
         {RECENTES.map((r, i) => (
-          <Bolinha key={i} r={r} tamanho={54} />
+          <Anel key={i} r={r === "E" ? "J" : r} empate={r === "E" ? 1 : 0} tamanho={54} />
         ))}
         {novaBolinha > 0 ? (
           <div style={{ width: 54 * novaBolinha, overflow: "visible" }}>
-            <Bolinha r="B" tamanho={54} escala={novaBolinha} brilho={1 - novaBolinha * 0.5} />
+            <Anel r="B" tamanho={54} escala={novaBolinha} brilho={1 - novaBolinha * 0.5} />
           </div>
         ) : null}
       </div>
@@ -383,17 +492,18 @@ const LeituraPainel: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const entra = spring({ frame, fps, config: { damping: 14 } });
-  const numeros = Math.floor(interpolate(frame, [10, 124], [0, 84], clamp));
+  const numeros = Math.floor(interpolate(frame, [10, 124], [0, CELULAS.length], clamp));
   const troca = interpolate(frame, [130, 144], [0, 1], suave);
-  // cena 7 começa em 50s (10s depois do início desta sequência)
-  const nova = interpolate(frame, [s(10) + 24, s(10) + 40], [0, 1], { ...clamp, easing: Easing.out(Easing.back(1.6)) });
-  const atualiza = interpolate(frame, [s(10) + 40, s(10) + 80], [0, 1], suave);
+  // a cena do painel atualizando começa CENAS.painel - CENAS.leitura segundos depois
+  const P = s(CENAS.painel - CENAS.leitura);
+  const nova = interpolate(frame, [P + 24, P + 40], [0, 1], { ...clamp, easing: Easing.out(Easing.back(1.6)) });
+  const atualiza = interpolate(frame, [P + 40, P + 80], [0, 1], suave);
   return (
     <div style={{ position: "absolute", inset: 0, transform: `scale(${0.9 + 0.1 * entra})`, opacity: entra }}>
-      <Celular x={130} y={190} w={820} h={1100}>
+      <Celular x={140} y={330} w={800} h={980}>
         {troca < 1 ? (
           <div style={{ position: "absolute", inset: 0, opacity: 1 - troca }}>
-            <Grafico x={22} y={330} celula={52} colunas={14} visiveis={84} numeros={numeros} fundo="rgba(255,255,255,0.06)" />
+            <Grafico x={(772 - TOTAL_COLUNAS * 46) / 2} y={300} celula={46} visiveis={CELULAS.length} numeros={numeros} />
           </div>
         ) : null}
         {troca > 0 ? (
@@ -446,13 +556,30 @@ const Final: React.FC = () => {
         <div style={{ flexShrink: 0, border: "4px solid #fff", borderRadius: 14, padding: "4px 14px", fontFamily: POPPINS, fontWeight: 700, fontSize: 42, color: "#fff" }}>+18</div>
         <div style={{ fontFamily: POPPINS, fontWeight: 500, fontSize: 34, lineHeight: 1.3, color: "#fff" }}>{TEXTOS.aviso}</div>
       </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 1180,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 22,
+          opacity: interpolate(frame, [20, 34], [0, 1], clamp),
+        }}
+      >
+        <div style={{ fontFamily: POPPINS, fontWeight: 500, fontSize: 30, color: CORES.textoSuave }}>{TEXTOS.desenvolvedoraFinal}</div>
+        <LogoPredyx altura={110} />
+      </div>
     </>
   );
 };
 
 const ORDEM: { de: number; ate: number; cena: React.FC; semSaida?: boolean }[] = [
   { de: CENAS.gancho, ate: CENAS.dados, cena: Gancho },
-  { de: CENAS.dados, ate: CENAS.grafico, cena: Dados },
+  { de: CENAS.dados, ate: CENAS.empate, cena: Dados },
+  { de: CENAS.empate, ate: CENAS.grafico, cena: TabelaEmpate },
   { de: CENAS.grafico, ate: CENAS.caderno, cena: GraficoColunas },
   { de: CENAS.caderno, ate: CENAS.envio, cena: Caderno },
   { de: CENAS.envio, ate: CENAS.leitura, cena: Envio },
@@ -472,6 +599,9 @@ export const Reels: React.FC = () => {
           </Cena>
         </Sequence>
       ))}
+      <Sequence from={0} durationInFrames={s(CENAS.final)} layout="none">
+        <SeloPredyx />
+      </Sequence>
       {LEGENDAS.map((l) => (
         <Sequence key={l.de} from={s(l.de)} durationInFrames={s(l.ate - l.de)} layout="none">
           <Legenda texto={l.texto} duracao={s(l.ate - l.de)} />

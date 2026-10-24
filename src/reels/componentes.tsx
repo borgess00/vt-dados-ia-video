@@ -11,24 +11,35 @@ export const CAVEAT = "Caveat, cursive";
 export type Resultado = "J" | "B" | "E";
 export const corDe = (r: Resultado) => (r === "J" ? CORES.jogador : r === "B" ? CORES.banca : CORES.empate);
 
-/** Gráfico de exemplo: 14 colunas x 6 linhas, lido coluna por coluna (de cima para baixo). */
-const COLUNAS = [
-  "JBJJBE",
-  "BJBBJJ",
-  "BBBBBB", // sequência
-  "JJBJEJ",
-  "BJJBJB",
-  "JBJBJB", // xadrez (colunas 5 e 6)
-  "BJBJBJ",
-  "JBBEJB",
-  "JBBEBB", // rampa: J em (8,0) (9,1) (10,2) (11,3) (12,4)
-  "BJBBEB",
-  "BBJBBE",
-  "EBBJBB",
-  "BBEBJB",
-  "JBJBBJ",
+/**
+ * Gráfico no estilo do print (estradão): cada coluna é uma sequência da mesma cor,
+ * lida de cima para baixo; o empate vira um risco amarelo sobre a bolinha.
+ * Formato: [resultado, tamanho da coluna, linhas com empate (opcional), empates por linha (opcional)]
+ */
+type Coluna = { r: "J" | "B"; n: number; empates?: number[]; dois?: number[] };
+const COLUNAS: Coluna[] = [
+  { r: "B", n: 2, empates: [1] },
+  { r: "J", n: 1 },
+  { r: "B", n: 6 }, // sequência
+  { r: "J", n: 2, empates: [0] },
+  { r: "B", n: 1 }, // xadrez (colunas 4 a 7)
+  { r: "J", n: 1 },
+  { r: "B", n: 1 },
+  { r: "J", n: 1 },
+  { r: "B", n: 1 }, // rampa (colunas 8 a 11)
+  { r: "J", n: 2, empates: [1] },
+  { r: "B", n: 3 },
+  { r: "J", n: 4, dois: [2] },
+  { r: "B", n: 2 },
+  { r: "J", n: 3 },
+  { r: "B", n: 1, empates: [0] },
+  { r: "J", n: 2 },
 ];
-export const GRADE: Resultado[] = COLUNAS.join("").split("") as Resultado[];
+export type Celula = { c: number; l: number; r: "J" | "B"; empate: number };
+export const CELULAS: Celula[] = COLUNAS.flatMap((col, c) =>
+  Array.from({ length: col.n }, (_, l) => ({ c, l, r: col.r, empate: col.dois?.includes(l) ? 2 : col.empates?.includes(l) ? 1 : 0 })),
+);
+export const TOTAL_COLUNAS = COLUNAS.length;
 export const LINHAS = 6;
 
 /* ───────────── fundo ───────────── */
@@ -109,43 +120,84 @@ export const Bolinha: React.FC<{ r: Resultado; tamanho: number; numero?: number;
   </div>
 );
 
+/** Bolinha vazada do gráfico, com risco amarelo quando houve empate. */
+export const Anel: React.FC<{ r: Resultado; tamanho: number; empate?: number; numero?: number; escala?: number; brilho?: number }> = ({
+  r,
+  tamanho,
+  empate = 0,
+  numero,
+  escala = 1,
+  brilho = 0,
+}) => (
+  <div style={{ position: "relative", width: tamanho, height: tamanho, transform: `scale(${escala})` }}>
+    <svg width={tamanho} height={tamanho} viewBox="0 0 100 100" style={{ filter: brilho ? `drop-shadow(0 0 ${10 * brilho}px ${corDe(r)})` : undefined }}>
+      <circle cx="50" cy="50" r="38" fill="none" stroke={corDe(r)} strokeWidth="13" />
+      {empate ? <line x1="22" y1="78" x2="78" y2="22" stroke={CORES.empate} strokeWidth="15" strokeLinecap="round" /> : null}
+    </svg>
+    {numero !== undefined || empate === 2 ? (
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: POPPINS,
+          fontWeight: 700,
+          fontSize: tamanho * (numero !== undefined ? 0.36 : 0.5),
+          color: numero !== undefined ? "#1b1640" : "#1b1640",
+        }}
+      >
+        {numero ?? 2}
+      </div>
+    ) : null}
+  </div>
+);
+
 /** Destaque sobre células do gráfico (coluna, linha). */
 export type Destaque = { celulas: [number, number][]; rotulo: string; de: number; ate: number };
 
 /**
- * Gráfico de bolinhas. `visiveis` pode ser fracionário (a última bolinha "entra").
+ * Gráfico (quadro branco com bolinhas vazadas). `visiveis` pode ser fracionário (a última bolinha "entra").
  * `numeros` mostra a ordem de leitura sobre as primeiras N bolinhas.
  */
 export const Grafico: React.FC<{
   x: number;
   y: number;
   celula: number;
-  colunas: number;
+  colunas?: number;
   visiveis: number;
   numeros?: number;
   destaques?: Destaque[];
-  fundo?: string;
-}> = ({ x, y, celula, colunas, visiveis, numeros = 0, destaques = [], fundo = "rgba(255,255,255,0.04)" }) => {
+}> = ({ x, y, celula, colunas = TOTAL_COLUNAS, visiveis, numeros = 0, destaques = [] }) => {
   const frame = useCurrentFrame();
-  const total = colunas * LINHAS;
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: colunas * celula, height: LINHAS * celula, borderRadius: 18, background: fundo }}>
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        width: colunas * celula,
+        height: LINHAS * celula,
+        borderRadius: 14,
+        background: "#ffffff",
+        boxShadow: "0 24px 60px rgba(0,0,0,0.45)",
+      }}
+    >
       <svg width={colunas * celula} height={LINHAS * celula} style={{ position: "absolute", left: 0, top: 0 }}>
         {Array.from({ length: colunas + 1 }, (_, i) => (
-          <line key={`v${i}`} x1={i * celula} y1={0} x2={i * celula} y2={LINHAS * celula} stroke="rgba(255,255,255,0.08)" />
+          <line key={`v${i}`} x1={i * celula} y1={0} x2={i * celula} y2={LINHAS * celula} stroke="#dfe3ea" strokeWidth={1.5} />
         ))}
         {Array.from({ length: LINHAS + 1 }, (_, i) => (
-          <line key={`h${i}`} x1={0} y1={i * celula} x2={colunas * celula} y2={i * celula} stroke="rgba(255,255,255,0.08)" />
+          <line key={`h${i}`} x1={0} y1={i * celula} x2={colunas * celula} y2={i * celula} stroke="#dfe3ea" strokeWidth={1.5} />
         ))}
       </svg>
-      {GRADE.slice(0, Math.min(total, Math.ceil(visiveis))).map((r, i) => {
+      {CELULAS.slice(0, Math.min(CELULAS.length, Math.ceil(visiveis))).map((cel, i) => {
         const parcial = Math.min(1, visiveis - i);
-        const c = Math.floor(i / LINHAS);
-        const l = i % LINHAS;
-        const s = celula * 0.8;
+        const t = celula * 0.84;
         return (
-          <div key={i} style={{ position: "absolute", left: c * celula + (celula - s) / 2, top: l * celula + (celula - s) / 2, opacity: Math.min(1, parcial * 2) }}>
-            <Bolinha r={r} tamanho={s} escala={parcial < 1 ? 0.4 + 0.8 * parcial : 1} numero={i < numeros ? i + 1 : undefined} />
+          <div key={i} style={{ position: "absolute", left: cel.c * celula + (celula - t) / 2, top: cel.l * celula + (celula - t) / 2, opacity: Math.min(1, parcial * 2) }}>
+            <Anel r={cel.r} tamanho={t} empate={cel.empate} escala={parcial < 1 ? 0.4 + 0.8 * parcial : 1} numero={i < numeros ? i + 1 : undefined} />
           </div>
         );
       })}
@@ -153,10 +205,8 @@ export const Grafico: React.FC<{
         if (frame < d.de || frame > d.ate) return null;
         const a = interpolate(frame, [d.de, d.de + 8, d.ate - 8, d.ate], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const pulso = 0.7 + 0.3 * Math.sin((frame - d.de) / 4);
-        const cs = d.celulas.map(([c]) => c);
-        const ls = d.celulas.map(([, l]) => l);
-        const topo = Math.min(...ls) * celula;
-        const esquerda = Math.min(...cs) * celula;
+        const topo = Math.min(...d.celulas.map(([, l]) => l)) * celula;
+        const esquerda = Math.min(...d.celulas.map(([c]) => c)) * celula;
         return (
           <div key={k} style={{ opacity: a }}>
             {d.celulas.map(([c, l], j) => (
@@ -164,13 +214,14 @@ export const Grafico: React.FC<{
                 key={j}
                 style={{
                   position: "absolute",
-                  left: c * celula + 2,
-                  top: l * celula + 2,
-                  width: celula - 4,
-                  height: celula - 4,
-                  borderRadius: "50%",
-                  border: `4px solid #fff`,
-                  boxShadow: `0 0 ${16 * pulso}px #fff, 0 0 ${30 * pulso}px ${CORES.roxo}`,
+                  left: c * celula + 1,
+                  top: l * celula + 1,
+                  width: celula - 2,
+                  height: celula - 2,
+                  borderRadius: 10,
+                  background: `${CORES.roxo}26`,
+                  border: `4px solid ${CORES.roxo}`,
+                  boxShadow: `0 0 ${16 * pulso}px ${CORES.roxo}`,
                 }}
               />
             ))}
@@ -178,13 +229,13 @@ export const Grafico: React.FC<{
               style={{
                 position: "absolute",
                 left: esquerda,
-                top: topo - 52,
+                top: topo - 56,
                 padding: "4px 14px",
                 borderRadius: 10,
                 background: CORES.roxo,
                 fontFamily: POPPINS,
                 fontWeight: 700,
-                fontSize: 26,
+                fontSize: 28,
                 color: "#fff",
                 whiteSpace: "nowrap",
                 boxShadow: `0 0 18px ${CORES.roxo}`,
